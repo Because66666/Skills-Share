@@ -1,0 +1,28 @@
+FROM node:20-alpine3.18
+
+WORKDIR /app
+
+# 安装系统依赖（包括 OpenSSL）
+RUN apk update && apk add --no-cache openssl-dev libressl curl
+
+# 复制后端代码和依赖文件
+COPY server ./server
+COPY server/package*.json ./server/
+
+# 复制前端构建产物（包含所有生成的文件）
+COPY dist ./dist
+
+# 安装 serve 来托管静态文件
+RUN npm install -g serve
+
+# 安装后端生产依赖
+WORKDIR /app/server
+RUN npm install --production
+
+# 回到应用根目录
+WORKDIR /app
+
+# 启动脚本
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+CMD ["./docker-entrypoint.sh"]

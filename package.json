@@ -1,0 +1,51 @@
+{
+  "name": "frontend-common-project",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:full": "concurrently \"vite\" \"npm run start:server\"",
+    "start:server": "cd server && npm run start:dev",
+    "build": "python scripts/generate_skills_json.py && tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-icons": "latest",
+    "@radix-ui/themes": "latest",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react-big-calendar": "^1.16.3",
+    "axios": "latest",
+    "clsx": "latest",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "latest",
+    "mermaid": "^11.12.2",
+    "react": "latest",
+    "react-big-calendar": "^1.19.4",
+    "react-dom": "latest",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "latest",
+    "react-syntax-highlighter": "^16.1.0",
+    "recharts": "latest",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
+    "tailwind-merge": "latest",
+    "zustand": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "latest",
+    "autoprefixer": "latest",
+    "concurrently": "^9.2.1",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}

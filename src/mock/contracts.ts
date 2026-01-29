@@ -1,0 +1,143 @@
+import { Contract } from '@/types/contract';
+
+export const mockContracts: Contract[] = [
+  {
+    id: '1',
+    code: 'CON-20240115-001',
+    name: '2024年度IT设备采购合同',
+    type: '采购',
+    status: 'fulfilled',
+    amount: 1250000,
+    currency: 'CNY',
+    signDate: '2024-01-15',
+    startDate: '2024-01-15',
+    endDate: '2025-01-14',
+    parties: {
+      primary: '智慧法务科技集团',
+      secondary: '联想（北京）有限公司',
+    },
+    creator: '张三',
+    createTime: '2024-01-10 10:00:00',
+    department: 'IT部',
+    riskLevel: 'low',
+    performance: {
+      totalAmount: 1250000,
+      paidAmount: 1250000,
+      progress: 100,
+    },
+    auditLog: [
+      { id: '1', action: '提交审批', operator: '张三', time: '2024-01-10 10:05:00' },
+      { id: '2', action: '部门审批通过', operator: '李四', time: '2024-01-10 14:00:00', comment: '同意' },
+      { id: '3', action: '法务审批通过', operator: '王五', time: '2024-01-11 09:30:00', comment: '条款无误' },
+      { id: '4', action: '签订完成', operator: '张三', time: '2024-01-15 10:00:00' },
+    ]
+  },
+  {
+    id: '2',
+    code: 'CON-20240220-003',
+    name: '总部大楼租赁合同续签',
+    type: '租赁',
+    status: 'performing',
+    amount: 5000000,
+    currency: 'CNY',
+    signDate: '2024-02-20',
+    startDate: '2024-03-01',
+    endDate: '2026-02-28',
+    parties: {
+      primary: '智慧法务科技集团',
+      secondary: '万达商业管理有限公司',
+    },
+    creator: '赵六',
+    createTime: '2024-02-15 09:00:00',
+    department: '行政部',
+    riskLevel: 'medium',
+    performance: {
+      totalAmount: 5000000,
+      paidAmount: 1250000,
+      progress: 25,
+      nextPaymentDate: '2024-06-01',
+      nextPaymentAmount: 1250000,
+    },
+    auditLog: []
+  },
+  {
+    id: '3',
+    code: 'CON-20240310-005',
+    name: '华东区销售代理协议',
+    type: '销售',
+    status: 'pending_approval',
+    amount: 800000,
+    currency: 'CNY',
+    signDate: '',
+    startDate: '',
+    endDate: '',
+    parties: {
+      primary: '智慧法务科技集团',
+      secondary: '上海贸易有限公司',
+    },
+    creator: '孙七',
+    createTime: '2024-03-10 15:30:00',
+    department: '销售部',
+    riskLevel: 'high',
+    performance: {
+      totalAmount: 800000,
+      paidAmount: 0,
+      progress: 0,
+    },
+    auditLog: [
+       { id: '1', action: '提交审批', operator: '孙七', time: '2024-03-10 15:35:00' },
+    ]
+  },
+  {
+    id: '4',
+    code: 'CON-20240312-006',
+    name: '高级法务顾问聘用合同',
+    type: '劳动',
+    status: 'draft',
+    amount: 360000,
+    currency: 'CNY',
+    signDate: '',
+    startDate: '',
+    endDate: '',
+    parties: {
+      primary: '智慧法务科技集团',
+      secondary: '陈八',
+    },
+    creator: 'HR Manager',
+    createTime: '2024-03-12 11:00:00',
+    department: '人力资源部',
+    riskLevel: 'low',
+    performance: {
+      totalAmount: 360000,
+      paidAmount: 0,
+      progress: 0,
+    },
+    auditLog: []
+  },
+  {
+    id: '5',
+    code: 'CON-20240315-008',
+    name: '云服务技术支持协议',
+    type: '服务',
+    status: 'signing',
+    amount: 200000,
+    currency: 'CNY',
+    signDate: '',
+    startDate: '2024-04-01',
+    endDate: '2025-03-31',
+    parties: {
+      primary: '智慧法务科技集团',
+      secondary: '阿里云计算有限公司',
+    },
+    creator: 'CTO',
+    createTime: '2024-03-01 10:00:00',
+    department: '技术部',
+    riskLevel: 'low',
+    performance: {
+      totalAmount: 200000,
+      paidAmount: 0,
+      progress: 0,
+    },
+    auditLog: []
+  }
+];

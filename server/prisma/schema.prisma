@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// --------------------------------------
+// Core Identity Models (RBAC + Multi-tenancy)
+// --------------------------------------
+
+model Tenant {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique // e.g., "org_001"
+  description String?
+  status      String   @default("active") // active, suspended
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users User[]
+
+  @@map("tenants")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g., "admin", "user"
+  description String?
+  permissions String   @default("[]") // JSON string of permission keys
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users User[]
+
+  @@map("roles")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String // Hashed password
+  name      String?
+  avatar    String?
+  status    String   @default("active") // active, inactive
+  lastLogin DateTime?
+
+  // Relations
+  tenantId String?
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
+  
+  roleId   String?
+  role     Role?   @relation(fields: [roleId], references: [id])
+
+  skills   Skill[] // User created skills
+  comments Comment[]
+  ratings  Rating[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// --------------------------------------
+// Business Models (Skills Share)
+// --------------------------------------
+
+model Skill {
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  content       String?  // Markdown content
+  author        String   // Display author name (legacy/display purpose)
+  
+  // Relations
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id])
+  
+  tags          Tag[]
+  comments      Comment[]
+  ratings       Rating[]
+  
+  downloadCount Int      @default(0)
+  rating        Float    @default(0)
+  status        String   @default("pending") // pending, approved, rejected
+  publishDate   DateTime @default(now())
+  icon          String   // Icon name (e.g., "Database", "Zap")
+  color         String   // Tailwind classes (e.g., "bg-blue-100 text-blue-600")
+
+  deletedAt     DateTime? // Soft delete timestamp
+
+  attachments   Attachment[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("skills")
+}
+
+model Attachment {
+  id           String   @id @default(uuid())
+  originalName String
+  fileName     String   @unique
+  mimeType     String
+  size         Int
+  path         String
+
+  skillId      String?
+  skill        Skill?   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  uploaderId   String
+  createdAt    DateTime @default(now())
+
+  @@map("attachments")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  skills    Skill[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tags")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  skillId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  skill     Skill    @relation(fields: [skillId], references: [id])
+
+  @@map("comments")
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  value     Int      // 1-5
+  userId    String
+  skillId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  skill     Skill    @relation(fields: [skillId], references: [id])
+
+  @@unique([userId, skillId]) // One rating per user per skill
+  @@map("ratings")
+}
