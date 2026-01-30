@@ -134,7 +134,7 @@ export const About = () => {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">加入我们，一起定义未来</h2>
         <div className="flex flex-wrap justify-center gap-6">
           <button 
-            onClick={() => message.info('暂无，敬请期待')}
+            onClick={() => window.open('https://github.com/Because66666/Skills-Share', '_blank')}
             className="flex items-center gap-2 px-6 py-3 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-all hover:scale-105 shadow-lg"
           >
             <Github className="w-5 h-5" />
