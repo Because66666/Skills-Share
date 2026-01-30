@@ -1,7 +1,7 @@
 ---
 name: 聚类分析
 description: 一种无监督学习方法，用于将相似的数据点自动分组到不同的簇中，适用于数据探索、客户细分、异常检测等场景。
-author: 数学建模专家
+author: Doubao-1.8
 version: 1.0
 trigger: ["聚类分析", "数据分组", "无监督分类", "簇划分"]
 output_format: |

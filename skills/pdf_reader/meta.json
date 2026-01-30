@@ -1,0 +1,98 @@
+{
+    "skill_folder_name": "pdf_reader",
+    "skill_md_content": "---\nname: PDF文件读取工具\ndescription: 用于读取PDF文件内容，支持提取文本、页面信息和元数据，适用于需要处理PDF文档的场景。\nauthor: Doubao-1.8\nversion: 1.0.0\ntrigger: 当需要读取PDF文件内容时触发\noutput_format: 包含提取的文本内容、页面信息和元数据的JSON格式数据\n---\n\n## 工作流程\n1. **文件准备**：确保PDF文件路径正确且文件可访问\n2. **内容提取**：调用工具读取PDF文件的文本内容\n3. **元数据提取**：获取PDF文件的基本信息（作者、创建时间、页数等）\n4. **结果输出**：返回结构化的文本内容和元数据信息\n\n## 约束条件\n- 输入必须为有效的PDF文件路径\n- 不支持加密或损坏的PDF文件\n- 扫描版PDF无法提取文本内容\n\n## 工具使用\n该PDF读取工具的具体实现代码位于`scripts/model.py`，通过调用`PDFReader`类可以完成PDF文件的读取和内容提取。类中提供了以下核心方法：\n- `__init__`：初始化PDF读取器\n- `extract_text`：提取PDF文件的全部文本内容\n- `extract_metadata`：提取PDF文件的元数据信息\n- `get_page_count`：获取PDF文件的总页数\n- `extract_page_text`：提取指定页面的文本内容",
+    "python_code": "import PyPDF2
+import os
+from typing import Dict, List, Optional
+
+class PDFReader:
+    def __init__(self, file_path: str):
+        \"\"\"
+        初始化PDF读取器
+        :param file_path: PDF文件的绝对路径
+        \"\"\"
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f\"文件不存在: {file_path}\")
+        if not file_path.lower().endswith('.pdf'):
+            raise ValueError(\"输入文件必须是PDF格式\")
+        
+        self.file_path = file_path
+        self.pdf_reader = None
+        self._open_pdf()
+
+    def _open_pdf(self):
+        \"\"\"
+        内部方法：打开PDF文件
+        \"\"\"
+        try:
+            with open(self.file_path, 'rb') as file:
+                self.pdf_reader = PyPDF2.PdfReader(file)
+        except Exception as e:
+            raise RuntimeError(f\"无法打开PDF文件: {str(e)}\")
+
+    def extract_text(self) -> str:
+        \"\"\"
+        提取PDF文件的全部文本内容
+        :return: 包含所有页面文本的字符串
+        \"\"\"
+        if not self.pdf_reader:
+            self._open_pdf()
+        
+        text = \"\"
+        for page in self.pdf_reader.pages:
+            text += page.extract_text() or \"\"
+        
+        return text
+
+    def extract_metadata(self) -> Dict:
+        \"\"\"
+        提取PDF文件的元数据信息
+        :return: 包含元数据的字典
+        \"\"\"
+        if not self.pdf_reader:
+            self._open_pdf()
+        
+        metadata = {}
+        if hasattr(self.pdf_reader, 'metadata'):
+            metadata = {
+                'title': self.pdf_reader.metadata.get('/Title', '').strip(),
+                'author': self.pdf_reader.metadata.get('/Author', '').strip(),
+                'subject': self.pdf_reader.metadata.get('/Subject', '').strip(),
+                'creator': self.pdf_reader.metadata.get('/Creator', '').strip(),
+                'producer': self.pdf_reader.metadata.get('/Producer', '').strip(),
+                'creation_date': self.pdf_reader.metadata.get('/CreationDate', '').strip(),
+                'modification_date': self.pdf_reader.metadata.get('/ModDate', '').strip()
+            }
+        
+        metadata['page_count'] = self.get_page_count()
+        return metadata
+
+    def get_page_count(self) -> int:
+        \"\"\"
+        获取PDF文件的总页数
+        :return: 总页数
+        \"\"\"
+        if not self.pdf_reader:
+            self._open_pdf()
+        
+        return len(self.pdf_reader.pages)
+
+    def extract_page_text(self, page_number: int) -> str:
+        \"\"\"
+        提取指定页面的文本内容
+        :param page_number: 页面编号（从1开始）
+        :return: 指定页面的文本内容
+        \"\"\"
+        if not self.pdf_reader:
+            self._open_pdf()
+        
+        if page_number < 1 or page_number > len(self.pdf_reader.pages):
+            raise ValueError(f\"页面编号无效，有效范围是1到{len(self.pdf_reader.pages)}\")
+        
+        page = self.pdf_reader.pages[page_number - 1]
+        return page.extract_text() or \"\"",
+    "requirements": [
+        "PyPDF2>=3.0.0"
+    ],
+    "examples_md_content": "## 示例1：读取PDF文件全部内容\n### 输入代码\n```python\nfrom scripts.model import PDFReader\n\n# 初始化PDF读取器\npdf_reader = PDFReader('example.pdf')\n\n# 提取全部文本内容\ntext_content = pdf_reader.extract_text()\nprint(\"PDF文本内容:\")\nprint(text_content)\n\n# 提取元数据\nmetadata = pdf_reader.extract_metadata()\nprint(\"\\nPDF元数据:\")\nprint(metadata)\n\n# 获取页数\npage_count = pdf_reader.get_page_count()\nprint(f\"\\n总页数: {page_count}\")\n```\n\n### 预期输出\n```\nPDF文本内容:\n这是PDF文件的第一页内容...\n这是PDF文件的第二页内容...\n\nPDF元数据:\n{'title': '示例PDF文档', 'author': '张三', 'subject': 'PDF读取示例', 'creator': 'Microsoft Word', 'producer': 'Adobe Acrobat Pro', 'creation_date': 'D:20230101000000', 'modification_date': 'D:20230101000000', 'page_count': 2}\n\n总页数: 2\n```\n\n---\n\n## 示例2：读取指定页面内容\n### 输入代码\n```python\nfrom scripts.model import PDFReader\n\n# 初始化PDF读取器\npdf_reader = PDFReader('example.pdf')\n\n# 提取第2页内容\npage2_text = pdf_reader.extract_page_text(2)\nprint(\"第2页内容:\")\nprint(page2_text)\n```\n\n### 预期输出\n```\n第2页内容:\n这是PDF文件的第二页内容...\n```"
+}

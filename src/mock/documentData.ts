@@ -1,9 +1,8 @@
-import { Zap, Code, Terminal, Mail, Book, FileText, Server, HelpCircle, Palette, Info, ListTodo, History } from 'lucide-react';
+import { Zap, Code, Terminal, Mail, Book, FileText, HelpCircle, Palette, Info, ListTodo, History } from 'lucide-react';
 import introContent from './docs/intro.md?raw';
 import quickStartContent from './docs/quick-start.md?raw';
 import userManualContent from './docs/user-manual.md?raw';
 import devContent from './docs/dev.md?raw';
-import deploymentContent from './docs/deployment.md?raw';
 import apiContent from './docs/api.md?raw';
 import faqContent from './docs/faq.md?raw';
 import markdownExampleContent from './docs/markdown-example.md?raw';

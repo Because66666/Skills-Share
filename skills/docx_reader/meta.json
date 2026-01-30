@@ -1,0 +1,114 @@
+{
+    "skill_folder_name": "docx_reader",
+    "skill_md_content": "---\nname: DOCX文件读取工具\ndescription: 用于读取DOCX文件内容，支持提取文本、段落信息和文档元数据，适用于需要处理Word文档的场景。\nauthor: Doubao-1.8\nversion: 1.0.0\ntrigger: 当需要读取DOCX文件内容时触发\noutput_format: 包含提取的文本内容、段落信息和元数据的JSON格式数据\n---\n\n## 工作流程\n1. **文件准备**：确保DOCX文件路径正确且文件可访问\n2. **内容提取**：调用工具读取DOCX文件的文本内容\n3. **元数据提取**：获取DOCX文件的基本信息（作者、创建时间、字数等）\n4. **结果输出**：返回结构化的文本内容和元数据信息\n\n## 约束条件\n- 输入必须为有效的DOCX文件路径\n- 不支持加密或损坏的DOCX文件\n- 不支持旧版DOC格式文件\n\n## 工具使用\n该DOCX读取工具的具体实现代码位于`scripts/model.py`，通过调用`DOCXReader`类可以完成DOCX文件的读取和内容提取。类中提供了以下核心方法：\n- `__init__`：初始化DOCX读取器\n- `extract_text`：提取DOCX文件的全部文本内容\n- `extract_metadata`：提取DOCX文件的元数据信息\n- `get_paragraphs`：获取DOCX文件的所有段落\n- `get_word_count`：获取DOCX文件的总字数\n- `extract_styles`：提取文档中使用的样式信息",
+    "python_code": "from docx import Document
+import os
+from typing import Dict, List, Optional
+
+class DOCXReader:
+    def __init__(self, file_path: str):
+        \"\"\"
+        初始化DOCX读取器
+        :param file_path: DOCX文件的绝对路径
+        \"\"\"
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f\"文件不存在: {file_path}\")
+        if not file_path.lower().endswith('.docx'):
+            raise ValueError(\"输入文件必须是DOCX格式\")
+        
+        self.file_path = file_path
+        self.document = None
+        self._open_docx()
+
+    def _open_docx(self):
+        \"\"\"
+        内部方法：打开DOCX文件
+        \"\"\"
+        try:
+            self.document = Document(self.file_path)
+        except Exception as e:
+            raise RuntimeError(f\"无法打开DOCX文件: {str(e)}\")
+
+    def extract_text(self) -> str:
+        \"\"\"
+        提取DOCX文件的全部文本内容
+        :return: 包含所有文本的字符串
+        \"\"\"
+        if not self.document:
+            self._open_docx()
+        
+        text = \"\"
+        for paragraph in self.document.paragraphs:
+            text += paragraph.text + \"\\n\"
+        
+        return text.strip()
+
+    def extract_metadata(self) -> Dict:
+        \"\"\"
+        提取DOCX文件的元数据信息
+        :return: 包含元数据的字典
+        \"\"\"
+        if not self.document:
+            self._open_docx()
+        
+        core_properties = self.document.core_properties
+        metadata = {
+            'title': core_properties.title or '',
+            'author': core_properties.author or '',
+            'subject': core_properties.subject or '',
+            'keywords': core_properties.keywords or '',
+            'comments': core_properties.comments or '',
+            'created': core_properties.created.strftime('%Y-%m-%d %H:%M:%S') if core_properties.created else '',
+            'modified': core_properties.modified.strftime('%Y-%m-%d %H:%M:%S') if core_properties.modified else '',
+            'last_modified_by': core_properties.last_modified_by or '',
+            'revision': core_properties.revision or 0,
+            'category': core_properties.category or ''
+        }
+        
+        metadata['word_count'] = self.get_word_count()
+        metadata['paragraph_count'] = len(self.document.paragraphs)
+        return metadata
+
+    def get_paragraphs(self) -> List[str]:
+        \"\"\"
+        获取DOCX文件的所有段落
+        :return: 包含所有段落文本的列表
+        \"\"\"
+        if not self.document:
+            self._open_docx()
+        
+        return [paragraph.text for paragraph in self.document.paragraphs if paragraph.text.strip()]
+
+    def get_word_count(self) -> int:
+        \"\"\"
+        获取DOCX文件的总字数
+        :return: 总字数
+        \"\"\"
+        if not self.document:
+            self._open_docx()
+        
+        word_count = 0
+        for paragraph in self.document.paragraphs:
+            word_count += len(paragraph.text.split())
+        
+        return word_count
+
+    def extract_styles(self) -> List[str]:
+        \"\"\"
+        提取文档中使用的样式信息
+        :return: 包含所有唯一样式名称的列表
+        \"\"\"
+        if not self.document:
+            self._open_docx()
+        
+        styles = set()
+        for paragraph in self.document.paragraphs:
+            if paragraph.style.name:
+                styles.add(paragraph.style.name)
+        
+        return list(styles)",
+    "requirements": [
+        "python-docx>=0.8.11"
+    ],
+    "examples_md_content": "## 示例1：读取DOCX文件全部内容\n### 输入代码\n```python\nfrom scripts.model import DOCXReader\n\n# 初始化DOCX读取器\ndocx_reader = DOCXReader('example.docx')\n\n# 提取全部文本内容\ntext_content = docx_reader.extract_text()\nprint(\"DOCX文本内容:\")\nprint(text_content)\n\n# 提取元数据\nmetadata = docx_reader.extract_metadata()\nprint(\"\\nDOCX元数据:\")\nprint(metadata)\n\n# 获取字数\nword_count = docx_reader.get_word_count()\nprint(f\"\\n总字数: {word_count}\")\n```\n\n### 预期输出\n```\nDOCX文本内容:\n这是DOCX文件的第一段内容...\n这是DOCX文件的第二段内容...\n\nDOCX元数据:\n{'title': '示例DOCX文档', 'author': '李四', 'subject': 'DOCX读取示例', 'keywords': 'Python, DOCX, 读取', 'comments': '', 'created': '2023-01-01 00:00:00', 'modified': '2023-01-01 00:00:00', 'last_modified_by': '李四', 'revision': 1, 'category': '', 'word_count': 100, 'paragraph_count': 2}\n\n总字数: 100\n```\n\n---\n\n## 示例2：获取DOCX文件段落信息\n### 输入代码\n```python\nfrom scripts.model import DOCXReader\n\n# 初始化DOCX读取器\ndocx_reader = DOCXReader('example.docx')\n\n# 获取所有段落\nparagraphs = docx_reader.get_paragraphs()\nprint(\"文档段落:\")\nfor i, paragraph in enumerate(paragraphs, 1):\n    print(f\"段落{i}: {paragraph}\")\n\n# 获取使用的样式\nstyles = docx_reader.extract_styles()\nprint(f\"\\n使用的样式: {styles}\")\n```\n\n### 预期输出\n```\n文档段落:\n段落1: 这是DOCX文件的第一段内容...\n段落2: 这是DOCX文件的第二段内容...\n\n使用的样式: ['Heading 1', 'Normal']\n```"
+}

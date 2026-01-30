@@ -26,7 +26,7 @@
 
 ## 功能特性
 
-- **全栈架构**: 采用 NestJS + Prisma + SQLite 构建稳健的后端服务，提供 RESTful API 支持。
+- **纯静态架构**: 前端采用纯静态模式运行，数据源于本地 Markdown 文件，无需后端数据库即可部署（保留 NestJS 后端代码结构供参考）。
 - **现代化前端**: 采用 React 18, TypeScript, Vite, Tailwind CSS 等最新技术构建。
 - **组件化架构**: 基于原子设计理论 (Atomic Design) 构建的通用组件库。
 - **响应式布局**: 完美适配桌面端和移动端设备。
