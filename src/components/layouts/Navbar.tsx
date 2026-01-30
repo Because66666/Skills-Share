@@ -18,10 +18,7 @@ export const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   // Get current user from local storage
-  const userStr = localStorage.getItem('user');
-  const user = userStr && userStr !== 'null' && userStr !== 'undefined' ? JSON.parse(userStr) : null;
-  const isAdmin = user?.role?.name === 'admin';
-
+  
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const navItems = [
@@ -31,10 +28,6 @@ export const Navbar: React.FC = () => {
     { label: '关于我们', path: '/about' },
   ];
   
-  if (isAdmin) {
-    navItems.push({ label: '审核管理', path: '/admin/skills' });
-  }
-
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   };

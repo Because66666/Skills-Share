@@ -4,12 +4,13 @@ import { skillsService, Skill } from '@/services/skillsService';
 import { SimpleMarkdown } from '@/components/data-display/SimpleMarkdown';
 import { Button } from '@/components/atoms/Button';
 import { Tag } from '@/components/atoms/Tag';
-import { TextArea } from '@/components/atoms/TextArea';
-import { ArrowLeft, Download, Star, User, Calendar, Share2, MessageCircle, Edit, Trash2, File as FileIcon } from 'lucide-react';
+// import { TextArea } from '@/components/atoms/TextArea';
+import { ArrowLeft, Download, Star, User, Calendar, Share2, /* MessageCircle, */ File as FileIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { getIconComponent } from '@/utils/iconMap';
 import { Spin } from '@/components/atoms/Spin';
 import { useMessage } from '@/components/feedback/Message';
+import { downloadSkill } from '@/utils/download';
 
 export const SkillDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,16 +18,8 @@ export const SkillDetail = () => {
   const message = useMessage();
   const [skill, setSkill] = useState<Skill | null>(null);
   const [loading, setLoading] = useState(true);
-  const [commentContent, setCommentContent] = useState('');
-  const [submittingComment, setSubmittingComment] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-
-  useEffect(() => {
-    const userStr = localStorage.getItem('user');
-    if (userStr && userStr !== 'null' && userStr !== 'undefined') {
-      setCurrentUser(JSON.parse(userStr));
-    }
-  }, []);
+  // const [commentContent, setCommentContent] = useState('');
+  // const [submittingComment, setSubmittingComment] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -84,21 +77,31 @@ export const SkillDetail = () => {
   const handleDownload = (attachment?: any) => {
     if (attachment) {
         // Download specific attachment
-        const url = `http://localhost:3000${attachment.path}`;
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = attachment.originalName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        message.success(`开始下载 ${attachment.originalName}`);
+        if (skill) {
+          // 如果附件路径以 /zip/ 开头，或者是我们生成的 zip，直接使用 downloadSkill
+          // 这里假设所有附件如果存在路径，都应该通过 downloadSkill 下载
+          // 但是 downloadSkill 默认逻辑是 /zip/{id}.zip
+          // 我们需要利用 downloadSkill 的第三个参数 attachmentUrl
+          
+          // 注意：attachment.path 在生成的 json 中是 /zip/xxx.zip
+          // 如果是上传的文件，可能是 /uploads/xxx
+          // 统一使用 downloadSkill
+          
+          downloadSkill(skill, message, attachment.path, attachment.originalName);
+        }
     } else {
         // Fallback for "Get Skill" button if no specific attachment logic defined yet
         // For now, if there are attachments, download the first one, or show message
-        if (skill.attachments && skill.attachments.length > 0) {
-            handleDownload(skill.attachments[0]);
-        } else {
-            message.info('该 Skill 暂无附件可供下载');
+        if (skill) {
+            if (skill.attachments && skill.attachments.length > 0) {
+                // 如果有附件，优先下载第一个
+                const firstAttachment = skill.attachments[0];
+                downloadSkill(skill, message, firstAttachment.path, firstAttachment.originalName);
+            } else {
+                // 如果没有附件列表，尝试下载默认的 /zip/{id}.zip
+                // 这是为了兼容还没有附件记录但有 zip 生成的情况（虽然脚本保证了关联）
+                downloadSkill(skill, message);
+            }
         }
     }
   };
@@ -107,34 +110,6 @@ export const SkillDetail = () => {
     navigator.clipboard.writeText(window.location.href);
     message.success('链接已复制到剪贴板');
   };
-
-  const handleEdit = () => {
-    navigate(`/skill/${id}/edit`);
-  };
-
-  const handleDelete = async () => {
-    if (window.confirm('确定要删除该 Skill 吗？（删除后可在管理员后台恢复）')) {
-      try {
-        await skillsService.remove(id!);
-        message.success('Skill 已删除');
-        navigate('/home');
-      } catch (error) {
-        message.error('删除失败');
-      }
-    }
-  };
-
-  const handleHardDelete = async () => {
-      if (window.confirm('警告：确定要彻底删除该 Skill 吗？此操作将永久删除 Skill 及其关联的附件文件，且不可恢复！')) {
-        try {
-          await skillsService.hardDelete(id!);
-          message.success('Skill 已彻底删除');
-          navigate('/home');
-        } catch (error) {
-          message.error('删除失败');
-        }
-      }
-    };
 
   const handleRate = async (value: number) => {
     try {
@@ -147,21 +122,21 @@ export const SkillDetail = () => {
     }
   };
 
-  const handleSubmitComment = async () => {
-    if (!commentContent.trim()) return;
-    setSubmittingComment(true);
-    try {
-      await skillsService.addComment(id!, commentContent);
-      message.success('评论已发布');
-      setCommentContent('');
-      const updated = await skillsService.findOne(id!);
-      setSkill(updated);
-    } catch (error) {
-      message.error('评论失败');
-    } finally {
-      setSubmittingComment(false);
-    }
-  };
+  // const handleSubmitComment = async () => {
+  //   if (!commentContent.trim()) return;
+  //   setSubmittingComment(true);
+  //   try {
+  //     await skillsService.addComment(id!, commentContent);
+  //     message.success('评论已发布');
+  //     setCommentContent('');
+  //     const updated = await skillsService.findOne(id!);
+  //     setSkill(updated);
+  //   } catch (error) {
+  //     message.error('评论失败');
+  //   } finally {
+  //     setSubmittingComment(false);
+  //   }
+  // };
 
   const IconComponent = typeof skill.icon === 'string' ? getIconComponent(skill.icon) : skill.icon;
 
@@ -178,21 +153,7 @@ export const SkillDetail = () => {
         </button>
 
         <div className="flex gap-2">
-           {currentUser && skill.user?.id === currentUser.id && (
-             <>
-               <Button variant="outline" size="sm" onClick={handleEdit}>
-                 <Edit className="w-4 h-4 mr-2" /> 编辑
-               </Button>
-               <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={handleDelete}>
-                 <Trash2 className="w-4 h-4 mr-2" /> 删除
-               </Button>
-             </>
-           )}
-           {currentUser && currentUser.role?.name === 'admin' && (
-              <Button variant="outline" size="sm" className="bg-red-50 text-red-600 hover:bg-red-100 border-red-200" onClick={handleHardDelete}>
-                <Trash2 className="w-4 h-4 mr-2" /> 彻底删除
-              </Button>
-           )}
+           
         </div>
       </div>
 
@@ -330,7 +291,7 @@ export const SkillDetail = () => {
           </div>
 
           {/* Comments Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+          {/* <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
             <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
               评论 ({skill.comments?.length || 0})
@@ -373,7 +334,7 @@ export const SkillDetail = () => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

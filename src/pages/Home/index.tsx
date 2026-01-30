@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { skillsService, type Skill } from '@/services/skillsService';
 import { SkillCard } from '@/components/organisms/Skill/SkillCard';
 import { Input } from '@/components/atoms/Input';
-import { Search, Filter, X, Plus } from 'lucide-react';
+import { Search, Filter, X } from 'lucide-react';
 import { useMessage } from '@/components/feedback/Message';
 import { Button } from '@/components/atoms/Button';
 import { cn } from '@/utils/cn';
+import { downloadSkill } from '@/utils/download';
 import { Empty } from '@/components/data-display/Empty';
 import { Spin } from '@/components/atoms/Spin';
 
@@ -17,14 +18,23 @@ export const Home = () => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const navigate = useNavigate();
   const message = useMessage();
-  const isLoggedIn = !!localStorage.getItem('user');
-
+  
   useEffect(() => {
     const fetchSkills = async () => {
       try {
+        console.log('Home: starting fetchSkills');
         const data = await skillsService.findAll();
-        // Ensure data is an array
-        setSkills(Array.isArray(data) ? data : []);
+        console.log('Home: fetchSkills result', data);
+        
+        if (Array.isArray(data)) {
+          setSkills(data);
+          if (data.length === 0) {
+            console.warn('Home: fetched data is an empty array');
+          }
+        } else {
+          console.error('Home: fetched data is not an array', data);
+          setSkills([]);
+        }
       } catch (error) {
         console.error('Failed to fetch skills', error);
         message.error('获取 Skill 列表失败');
@@ -65,8 +75,7 @@ export const Home = () => {
   };
 
   const handleDownload = (skill: Skill) => {
-    message.success(`开始下载: ${skill.title}`);
-    // In a real app, this would trigger a file download
+    downloadSkill(skill, message);
   };
 
   if (loading) {
@@ -134,11 +143,6 @@ export const Home = () => {
               </Button>
             )}
           </div>
-          {isLoggedIn && (
-            <Button onClick={() => navigate('/skill/create')} className="flex items-center gap-2 shadow-sm">
-              <Plus className="w-4 h-4" /> 发布 Skill
-            </Button>
-          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {allTags.map(tag => (

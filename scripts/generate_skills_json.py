@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import zipfile
 from datetime import datetime
 
 def parse_frontmatter(content):
@@ -22,16 +23,31 @@ def parse_frontmatter(content):
             
     return frontmatter
 
+def create_zip(source_dir, output_filename):
+    """
+    Zip the contents of source_dir into output_filename.
+    """
+    with zipfile.ZipFile(output_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(source_dir):
+            for file in files:
+                file_path = os.path.join(root, file)
+                # Calculate relative path to preserve directory structure inside zip
+                arcname = os.path.relpath(file_path, source_dir)
+                zipf.write(file_path, arcname)
+
 def main():
     # Base paths
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     skills_dir = os.path.join(base_dir, 'skills')
     public_dir = os.path.join(base_dir, 'public')
+    public_zip_dir = os.path.join(public_dir, 'zip')
     output_file = os.path.join(public_dir, 'skills.json')
 
-    # Ensure public directory exists
+    # Ensure public directories exist
     if not os.path.exists(public_dir):
         os.makedirs(public_dir)
+    if not os.path.exists(public_zip_dir):
+        os.makedirs(public_zip_dir)
 
     skills = []
 
@@ -50,6 +66,14 @@ def main():
                             
                         frontmatter = parse_frontmatter(content)
                         
+                        # Create ZIP file
+                        zip_filename = f"{folder_name}.zip"
+                        zip_filepath = os.path.join(public_zip_dir, zip_filename)
+                        create_zip(folder_path, zip_filepath)
+                        
+                        # Get ZIP file size
+                        zip_size = os.path.getsize(zip_filepath)
+
                         # Map fields and add defaults
                         skill = {
                             "id": folder_name,
@@ -61,7 +85,7 @@ def main():
                             "output_format": frontmatter.get('output_format', ''),
                             # Default fields for frontend compatibility
                             "content": content, # Optionally include full content
-                            "tags": [{"id": "t1", "name": "AI"}], # Default tag
+                            "tags": [{"id": "t1", "name": "数学建模"}], # Default tag
                             "downloadCount": 0,
                             "rating": 5.0,
                             "publishDate": datetime.now().strftime("%Y-%m-%d"),
@@ -69,17 +93,26 @@ def main():
                             "color": "blue", # Default color
                             "status": "approved",
                             "user": {
-                                "id": "admin",
+                                "id": "id",
                                 "name": frontmatter.get('author', 'Unknown'),
                                 "avatar": ""
                             },
                             "comments": [],
                             "ratings": [],
-                            "attachments": []
+                            "attachments": [
+                                {
+                                    "id": f"zip-{folder_name}",
+                                    "originalName": zip_filename,
+                                    "fileName": zip_filename,
+                                    "mimeType": "application/zip",
+                                    "size": zip_size,
+                                    "path": f"/zip/{zip_filename}"
+                                }
+                            ]
                         }
                         
                         skills.append(skill)
-                        print(f"Processed skill: {folder_name}")
+                        print(f"Processed skill: {folder_name} (Zip created: {zip_filename}, Size: {zip_size} bytes)")
                         
                     except Exception as e:
                         print(f"Error processing {folder_name}: {e}")

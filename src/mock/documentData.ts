@@ -45,12 +45,6 @@ export const documentSections: DocSection[] = [
     content: devContent
   },
   {
-    id: 'deployment',
-    title: '部署与运维',
-    icon: Server,
-    content: deploymentContent
-  },
-  {
     id: 'api',
     title: 'API调用文档',
     icon: Terminal,

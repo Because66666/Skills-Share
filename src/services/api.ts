@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: '/api', // Proxy handles target
+  baseURL: '/', // Proxy handles target
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

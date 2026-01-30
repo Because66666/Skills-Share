@@ -4,6 +4,7 @@ import { Trophy } from 'lucide-react';
 import { useMessage } from '@/components/feedback/Message';
 import { useNavigate } from 'react-router-dom';
 import { Skill } from '@/services/skillsService';
+import { downloadSkill } from '@/utils/download';
 
 export const Charts = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const Charts = () => {
               <SkillCard 
                 skill={adaptedSkill} 
                 onPreview={() => navigate(`/skill/${skill.id}`)}
-                onDownload={() => message.success(`下载: ${skill.title}`)}
+                onDownload={() => downloadSkill(adaptedSkill, message)}
                 onClick={() => navigate(`/skill/${skill.id}`)}
               />
             </div>

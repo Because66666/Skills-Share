@@ -65,9 +65,24 @@ export interface CreateSkillRequest {
 // 辅助函数：从 skills.json 获取数据
 const fetchSkills = async (): Promise<Skill[]> => {
     try {
+        console.log('Fetching skills from /skills.json...');
         const response = await api.get('/skills.json');
-        // axios interceptor 已经返回了 response.data，所以这里直接断言
-        return response as unknown as Skill[];
+        console.log('Skills fetched:', response);
+        
+        // If response is the array itself (due to interceptor)
+        if (Array.isArray(response)) {
+            return response as unknown as Skill[];
+        }
+        
+        // If response is an object with data property (in case interceptor didn't work as expected or structure changed)
+        // @ts-ignore
+        if (response && Array.isArray(response.data)) {
+            // @ts-ignore
+            return response.data as Skill[];
+        }
+
+        console.warn('Unexpected response structure:', response);
+        return [];
     } catch (error) {
         console.error('Failed to load skills.json', error);
         return [];
@@ -106,22 +121,27 @@ export const skillsService = {
   // 保留以下方法存根以兼容前端组件调用，防止编译错误。
 
   uploadFile: async (file: File): Promise<Attachment> => {
+    console.debug('Static mode: uploadFile called', file);
     return Promise.reject(new Error('Static mode: Upload not supported'));
   },
 
   create: async (data: CreateSkillRequest): Promise<Skill> => {
+    console.debug('Static mode: create called', data);
     return Promise.reject(new Error('Static mode: Create not supported'));
   },
 
   update: async (id: string, data: Partial<CreateSkillRequest>): Promise<Skill> => {
+    console.debug('Static mode: update called', id, data);
     return Promise.reject(new Error('Static mode: Update not supported'));
   },
 
   remove: async (id: string): Promise<void> => {
+    console.debug('Static mode: remove called', id);
     return Promise.reject(new Error('Static mode: Delete not supported'));
   },
 
   hardDelete: async (id: string): Promise<void> => {
+    console.debug('Static mode: hardDelete called', id);
     return Promise.reject(new Error('Static mode: Hard delete not supported'));
   },
 
@@ -134,14 +154,17 @@ export const skillsService = {
   },
 
   addComment: async (id: string, content: string): Promise<Comment> => {
+    console.debug('Static mode: addComment called', id, content);
     return Promise.reject(new Error('Static mode: Comments not supported'));
   },
 
   updateStatus: async (id: string, status: 'approved' | 'rejected'): Promise<Skill> => {
+    console.debug('Static mode: updateStatus called', id, status);
     return Promise.reject(new Error('Static mode: Update status not supported'));
   },
 
   addRating: async (id: string, value: number): Promise<Rating> => {
+    console.debug('Static mode: addRating called', id, value);
     return Promise.reject(new Error('Static mode: Rating not supported'));
   }
 };

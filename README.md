@@ -1,33 +1,8 @@
-# 前端通用组件项目
+# Skills Share项目
 
-基于 React 18 + TypeScript + Vite + Tailwind CSS 的前端通用组件项目，提供基础平台功能和文档中心功能。
+基于 React 18 + TypeScript + Vite + Tailwind CSS 的skill share项目，用于分享适用于智能体的skill压缩包。
 
-## 🚀 在线访问
-
-**CloudBase 部署地址**: https://ai-native-6gjx1a8d8074b047-1252095952.tcloudbaseapp.com/
-
-**Tencent Lighthouse 部署地址**: http://49.232.127.105
-
-**部署信息**:
-- **CloudBase 部署**:
-  - 部署平台: 腾讯云 CloudBase 静态托管
-  - 环境ID: ai-native-6gjx1a8d8074b047
-  - 地域: 华东 (上海)
-  - 部署时间: 2026-01-26
-
-- **Tencent Lighthouse 部署**:
-  - 服务器 IP: 49.232.127.105
-  - 实例 ID: lhins-6d2mx3e6
-  - 实例名称: Ubuntu22.04-Docker26-59qi
-  - 地域: 华北 (北京)
-  - 部署时间: 2026-01-29
-  - Docker 镜像: allskills_20260129085550-app
-  - 状态: ✅ 前后端服务均正常运行
-  - 前端: http://49.232.127.105 (端口 80)
-  - 后端 API: http://49.232.127.105:3000 (端口 3000)
-  - 修复记录:
-    - SkillReview 页面添加数据类型检查
-    - 修复后端 uuid ESM 兼容性问题（改用 Node.js 内置 crypto.randomUUID）
+## 说明
 
 - **项目文档**:
   - [项目规则](./.trae/rules/project_rules.md)
@@ -48,12 +23,6 @@
 - **图标库**: Lucide React
 - **图表库**: Recharts
 
-#### 后端
-- **核心框架**: NestJS
-- **ORM**: Prisma
-- **数据库**: SQLite (支持平滑迁移至 PostgreSQL/MySQL)
-- **文件服务**: Multer + 静态资源托管
-- **文档**: Swagger (集成中)
 
 ## 功能特性
 
@@ -62,14 +31,9 @@
 - **组件化架构**: 基于原子设计理论 (Atomic Design) 构建的通用组件库。
 - **响应式布局**: 完美适配桌面端和移动端设备。
 - **主题系统**: 支持 **浅色/深色/跟随系统** 三种外观模式，自动持久化用户偏好。
-- **原型演示系统**: 内置交互式业务规则标注功能，可在侧边栏用户卡片中开启“演示模式”，方便进行产品原型展示与业务逻辑讲解。
 - **丰富的图表**: 集成 Recharts 实现多种数据可视化图表。
-- **数据持久化**: Skills 核心数据已完全迁移至数据库，支持真实的增删改查与搜索过滤。
-- **智能编辑**: Skill 编辑器支持 **随机外观生成** 与 **内容自动打标**，大幅提升创作效率。
-- **审核机制**: 完善的 Skill 内容审核流程，确保平台内容的质量与安全。
-- **安全认证**: 完整的 JWT 认证流程，支持密码哈希存储 (Bcrypt) 与 Token 持久化。
-- **完善的模拟数据**: 提供丰富的用户、角色、组织架构等模拟数据（逐步迁移中），以及 **高质量的 Skill 示例**，便于开发和测试。
-- **业务模块**: 包含仪表盘、系统设置、文档中心、Skills 分享站等核心业务功能。
+- **数据持久化**: 
+  - **静态模式**: 数据来源于本地 Markdown 文件，通过脚本自动生成 JSON 数据源与 Zip 附件包，无需后端数据库即可运行。
 
 ## 核心业务模块详情
 
@@ -77,16 +41,20 @@
 - **文档中心**: 提供系统操作指南、开发文档、API文档等全方位文档支持。
 - **帮助中心**: 全新升级的自助服务中心，采用搜索优先设计，提供角色化指引、视频教程、热门问题解答及文档快捷导航。
 
-## 静态数据生成
+## skill数据卡片元数据与自动化打包
 
-项目使用 Python 脚本从本地 Markdown 文件生成静态 JSON 数据供前端使用。
+项目使用 Python 脚本从本地 Markdown 文件生成静态 JSON 数据供前端使用，并自动处理资源打包。
 
 **使用方法**:
 ```bash
 # 在项目根目录下运行
 python scripts/generate_skills_json.py
 ```
-该脚本会扫描 `skills` 目录下的所有子目录，读取 `SKILL.md` 的 Frontmatter 信息，并生成 `public/skills.json` 文件。
+
+**功能说明**:
+1. **数据生成**: 扫描 `skills` 目录下的所有子目录，读取 `SKILL.md` 的 Frontmatter 信息，生成 `public/skills.json` 文件。
+2. **自动压缩**: 自动将每个 Skill 文件夹下的内容（包括文档和资源）打包为 Zip 文件，存放在 `public/zip` 目录下。
+3. **附件关联**: 生成的 Zip 包会自动关联到 Skill 数据的附件字段，供前端实现一键下载功能。
 
 ## 目录结构
 
@@ -135,19 +103,6 @@ python scripts/generate_skills_json.py
   - 路由配置文件：kebab-case（如：index.tsx）
 - 使用ESLint和Prettier进行代码检查和格式化
 - 组件设计遵循单一职责原则
-
-### 后端开发规范
-- 使用TypeScript
-- 遵循NestJS最佳实践
-- 控制器使用RESTful API设计
-- 服务层封装业务逻辑
-- 文件命名规则：
-  - 控制器文件：kebab-case + .controller.ts（如：claim.controller.ts）
-  - 服务文件：kebab-case + .service.ts（如：claim.service.ts）
-  - 模块文件：kebab-case + .module.ts（如：claim.module.ts）
-  - DTO文件：kebab-case + .dto.ts（如：create-claim.dto.ts）
-  - 实体文件：在Prisma schema中定义
-- 使用ESLint和Prettier进行代码检查和格式化
 
 
 ## 已实现组件清单

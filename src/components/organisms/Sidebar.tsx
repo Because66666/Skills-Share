@@ -10,13 +10,11 @@ import {
   User,
   Moon,
   HelpCircle,
-  Building,
   Search,
   Keyboard,
   Book,
-  FileText,
-  KeyRound,
   FileSearch,
+  KeyRound,
 } from 'lucide-react';
 import logo from '@/assets/images/logo.svg';
 import { currentUser } from '@/mock/dashboardData';
@@ -35,8 +33,6 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { icon: LayoutDashboard, label: '仪表盘', path: '/dashboard' },
-  { icon: FileText, label: '附件清理', path: '/admin/cleanup' },
-  { icon: KeyRound, label: '审核管理', path: '/admin/skills' },
   { 
     icon: User, 
     label: '个人中心', 
@@ -46,11 +42,6 @@ const menuItems: MenuItem[] = [
     icon: Settings, 
     label: '系统设置', 
     path: '/settings',
-  },
-  { 
-    icon: Building, 
-    label: '租户管理', 
-    path: '/SystemSettings',
   },
   { icon: Layers, label: '组件库', path: '/gallery' },
 ];
@@ -94,10 +85,6 @@ export const Sidebar: React.FC = () => {
     const newTheme = isDark ? 'light' : 'dark';
     setTheme(newTheme);
     message.success(`已切换至${newTheme === 'dark' ? '深色' : '浅色'}模式`);
-  };
-
-  const handleTenantSwitch = () => {
-    message.info('演示模式下暂不支持切换企业');
   };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
@@ -247,13 +234,6 @@ export const Sidebar: React.FC = () => {
               
               {/* Group 2 */}
               <div className="p-1">
-                <button 
-                  onClick={handleTenantSwitch}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
-                >
-                  <Building className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  <span>切换企业/租户</span>
-                </button>
                 <button 
                   onClick={() => setShowShortcuts(true)}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"

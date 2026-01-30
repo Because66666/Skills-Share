@@ -11,23 +11,32 @@
     "tags": [
       {
         "id": "t1",
-        "name": "AI"
+        "name": "数学建模"
       }
     ],
     "downloadCount": 0,
     "rating": 5.0,
-    "publishDate": "2026-01-29",
+    "publishDate": "2026-01-30",
     "icon": "Code",
     "color": "blue",
     "status": "approved",
     "user": {
-      "id": "admin",
+      "id": "id",
       "name": "数学建模专家",
       "avatar": ""
     },
     "comments": [],
     "ratings": [],
-    "attachments": []
+    "attachments": [
+      {
+        "id": "zip-arima_time_series_model",
+        "originalName": "arima_time_series_model.zip",
+        "fileName": "arima_time_series_model.zip",
+        "mimeType": "application/zip",
+        "size": 8779,
+        "path": "/zip/arima_time_series_model.zip"
+      }
+    ]
   },
   {
     "id": "canonical_correlation_analysis",
@@ -41,23 +50,32 @@
     "tags": [
       {
         "id": "t1",
-        "name": "AI"
+        "name": "数学建模"
       }
     ],
     "downloadCount": 0,
     "rating": 5.0,
-    "publishDate": "2026-01-29",
+    "publishDate": "2026-01-30",
     "icon": "Code",
     "color": "blue",
     "status": "approved",
     "user": {
-      "id": "admin",
+      "id": "id",
       "name": "数学建模专家",
       "avatar": ""
     },
     "comments": [],
     "ratings": [],
-    "attachments": []
+    "attachments": [
+      {
+        "id": "zip-canonical_correlation_analysis",
+        "originalName": "canonical_correlation_analysis.zip",
+        "fileName": "canonical_correlation_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 8259,
+        "path": "/zip/canonical_correlation_analysis.zip"
+      }
+    ]
   },
   {
     "id": "categorical_independence_test",
@@ -71,23 +89,32 @@
     "tags": [
       {
         "id": "t1",
-        "name": "AI"
+        "name": "数学建模"
       }
     ],
     "downloadCount": 0,
     "rating": 5.0,
-    "publishDate": "2026-01-29",
+    "publishDate": "2026-01-30",
     "icon": "Code",
     "color": "blue",
     "status": "approved",
     "user": {
-      "id": "admin",
+      "id": "id",
       "name": "数学建模专家",
       "avatar": ""
     },
     "comments": [],
     "ratings": [],
-    "attachments": []
+    "attachments": [
+      {
+        "id": "zip-categorical_independence_test",
+        "originalName": "categorical_independence_test.zip",
+        "fileName": "categorical_independence_test.zip",
+        "mimeType": "application/zip",
+        "size": 5568,
+        "path": "/zip/categorical_independence_test.zip"
+      }
+    ]
   },
   {
     "id": "clustering_analysis",
@@ -101,23 +128,32 @@
     "tags": [
       {
         "id": "t1",
-        "name": "AI"
+        "name": "数学建模"
       }
     ],
     "downloadCount": 0,
     "rating": 5.0,
-    "publishDate": "2026-01-29",
+    "publishDate": "2026-01-30",
     "icon": "Code",
     "color": "blue",
     "status": "approved",
     "user": {
-      "id": "admin",
+      "id": "id",
       "name": "数学建模专家",
       "avatar": ""
     },
     "comments": [],
     "ratings": [],
-    "attachments": []
+    "attachments": [
+      {
+        "id": "zip-clustering_analysis",
+        "originalName": "clustering_analysis.zip",
+        "fileName": "clustering_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 7289,
+        "path": "/zip/clustering_analysis.zip"
+      }
+    ]
   },
   {
     "id": "discriminant_analysis",
@@ -131,22 +167,31 @@
     "tags": [
       {
         "id": "t1",
-        "name": "AI"
+        "name": "数学建模"
       }
     ],
     "downloadCount": 0,
     "rating": 5.0,
-    "publishDate": "2026-01-29",
+    "publishDate": "2026-01-30",
     "icon": "Code",
     "color": "blue",
     "status": "approved",
     "user": {
-      "id": "admin",
+      "id": "id",
       "name": "数学建模专家",
       "avatar": ""
     },
     "comments": [],
     "ratings": [],
-    "attachments": []
+    "attachments": [
+      {
+        "id": "zip-discriminant_analysis",
+        "originalName": "discriminant_analysis.zip",
+        "fileName": "discriminant_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 7953,
+        "path": "/zip/discriminant_analysis.zip"
+      }
+    ]
   }
 ]

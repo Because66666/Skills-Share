@@ -113,15 +113,15 @@ export const About = () => {
 
         <div className="grid md:grid-cols-4 gap-6">
           {[
-            { name: "Alex Chen", role: "Founder & Lead", avatar: "AC", color: "bg-blue-500" },
-            { name: "Sarah Wu", role: "Product Design", avatar: "SW", color: "bg-pink-500" },
-            { name: "Mike Zhang", role: "Core Dev", avatar: "MZ", color: "bg-green-500" },
-            { name: "Yuki Tanaka", role: "Community", avatar: "YT", color: "bg-orange-500" },
+            { name: "我是十三", role: "Founder & Product Design", avatar: "/img/13.png", color: "bg-blue-500" },
+            { name: "Because", role: "Core Dev", avatar: "/img/because.png", color: "bg-pink-500" },
           ].map((member, i) => (
             <div key={i} className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-gray-300 transition-colors">
-              <div className={`w-20 h-20 rounded-full ${member.color} text-white flex items-center justify-center text-2xl font-bold mb-4 shadow-lg`}>
-                {member.avatar}
-              </div>
+              <img 
+                src={member.avatar} 
+                alt={member.name}
+                className="w-20 h-20 rounded-full mb-4 shadow-lg object-cover"
+              />
               <h3 className="font-bold text-gray-900 dark:text-gray-100">{member.name}</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">{member.role}</p>
             </div>
