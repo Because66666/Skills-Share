@@ -2,7 +2,8 @@
 name: 时间序列数据的正态性检验
 description: 用于检验时间序列数据是否服从正态分布的工具，提供多种统计检验方法（Shapiro-Wilk、Kolmogorov-Smirnov、Jarque-Bera）及可视化（Q-Q图），帮助判断数据是否满足正态性假设，为后续统计分析提供依据。
 author: Doubao-1.8
-version: 1.0.0
+version: 1.0
+tag: 数学建模
 trigger:
   - 检验时间序列正态性
   - 时间序列是否服从正态分布

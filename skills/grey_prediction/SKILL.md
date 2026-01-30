@@ -2,7 +2,8 @@
 name: 灰色预测模型
 description: 灰色预测模型是一种针对小样本、贫信息系统的预测方法，适用于数据量少、信息不足但具有一定趋势的预测场景，如经济预测、产量预测等。
 author: Doubao-1.8
-version: 1.0.0
+version: 1.0
+tag: 数学建模
 trigger: ["灰色预测", "GM(1,1)", "小样本预测", "贫信息预测"]
 output_format: |
   {

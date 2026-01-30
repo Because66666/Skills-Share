@@ -85,7 +85,7 @@ def main():
                             "output_format": frontmatter.get('output_format', ''),
                             # Default fields for frontend compatibility
                             "content": content, # Optionally include full content
-                            "tags": [{"id": "t1", "name": "数学建模"}], # Default tag
+                            "tags": [{"id": "t1", "name": frontmatter.get('tag', '')}], # Default tag
                             "downloadCount": 0,
                             "rating": 5.0,
                             "publishDate": datetime.now().strftime("%Y-%m-%d"),

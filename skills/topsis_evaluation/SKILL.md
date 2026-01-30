@@ -3,6 +3,7 @@ name: TOPSIS评价法
 description: TOPSIS（Technique for Order Preference by Similarity to Ideal Solution）即优劣解距离法，是一种常用的多指标综合评价方法，通过计算各评价对象与最优解、最劣解的相对距离来确定其优劣排序。
 author: 数学建模助手
 version: 1.0
+tag: 数学建模
 trigger: ["TOPSIS", "优劣解距离法", "多指标综合评价", "TOPSIS评价"]
 output_format: >
   JSON格式，包含以下字段：

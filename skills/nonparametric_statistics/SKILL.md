@@ -2,7 +2,8 @@
 name: 非参数统计分析工具
 description: 提供多种常用非参数统计检验方法的实现，适用于不满足正态分布假设的数据集，包括Mann-Whitney U检验、Wilcoxon符号秩检验、Kruskal-Wallis H检验等，帮助用户进行稳健的统计推断。
 author: Doubao-1.8
-version: 1.0.0
+version: 1.0
+tag: 数学建模
 trigger: 当用户需要对不满足正态分布的数据集进行统计检验，或提及非参数统计、Mann-Whitney、Wilcoxon、Kruskal-Wallis等关键词时触发。
 output_format: JSON格式，包含检验类型、统计量、p值、备择假设及专业结论。
 ---

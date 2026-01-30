@@ -2,7 +2,8 @@
 name: PDF文件读取工具
 description: 用于读取PDF文件内容，支持提取文本、页面信息和元数据，适用于需要处理PDF文档的场景。
 author: Doubao-1.8
-version: 1.0.0
+version: 1.0
+tag: 文档处理
 trigger: 当需要读取PDF文件内容时触发
 output_format: 包含提取的文本内容、页面信息和元数据的JSON格式数据
 ---
