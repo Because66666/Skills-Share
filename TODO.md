@@ -1,5 +1,6 @@
 # 需求点清单 & TODO List
 
 - [x] 简化设计，只保留必要的功能。(已移除 Docker 相关代码)
+- [x] 添加 Cloudflare 部署配置 (wrangler.jsonc)
 - [ ] 一个友好的上传skill的教程，在/docs目录下。
 - [ ] 细节优化。

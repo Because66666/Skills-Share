@@ -2,6 +2,11 @@
 
 所有对本项目的重要更改都将记录在本文件中，按倒序排列，最新版本在顶部。
 
+## [Version 1.3.5] - 2026-01-30
+
+### 新增 (Added)
+- **部署配置**: 新增 `wrangler.jsonc` 配置文件，支持通过 Cloudflare Workers Assets 或 Pages 进行静态部署。
+
 ## [Version 1.3.4] - 2026-01-30
 
 ### 移除 (Removed)

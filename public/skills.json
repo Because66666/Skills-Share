@@ -7,8 +7,7 @@
     "version": "1.0",
     "trigger": "当用户需要对单变量时间序列数据进行预测时触发，场景包括但不限于月度销量预测、季度经济指标预测、库存需求预测等。",
     "output_format": "包含预测值序列、95%置信区间、模型训练评估指标（MAE、RMSE）的结构化字典结果。",
-    "content": "---\nname: 时间序列ARIMA预测模型\ndescription: 基于自回归积分滑动平均（ARIMA）模型的单变量时间序列预测工具，支持自动参数调优与手动参数配置，适用于销量、库存、经济指标等短期至中期趋势预测。\nauthor: Doubao-1.8\nversion: 1.0
-tag: 数学建模\ntrigger: 当用户需要对单变量时间序列数据进行预测时触发，场景包括但不限于月度销量预测、季度经济指标预测、库存需求预测等。\noutput_format: 包含预测值序列、95%置信区间、模型训练评估指标（MAE、RMSE）的结构化字典结果。\n---\n\n## 工作流程\n1. **数据准备**：加载单变量时间序列数据，确保数据为带datetime类型索引的Pandas Series或DataFrame，处理缺失值（插值/删除）与异常值。\n2. **平稳性处理**：通过ADF检验判断序列平稳性，若不平稳则进行差分操作确定d值。\n3. **参数选择**：\n   - 手动模式：通过ACF/PACF图分析确定AR阶数p和MA阶数q；\n   - 自动模式：使用AutoARIMA算法自动搜索最优p、d、q组合。\n4. **模型训练**：利用选定参数训练ARIMA模型，完成参数估计与残差检验。\n5. **模型评估**：计算训练集的MAE、RMSE指标，验证残差是否为白噪声。\n6. **预测输出**：生成指定未来步数的预测值及置信区间，支持可视化展示。\n\n## 约束条件\n1. 仅支持单变量时间序列数据，输入需包含连续的时间索引（如日、月、季度）。\n2. 模型适用于短期至中期预测，建议预测步数不超过原始序列长度的20%。\n3. 若序列存在明显季节性趋势，建议使用SARIMA模型替代本工具。\n4. 输入数据缺失值占比需低于5%，否则需先完成缺失值处理。\n\n## 工具使用\n本技能的ARIMA模型实现代码位于`scripts/model.py`，提供`ARIMAPredictor`类，核心功能如下：\n- `__init__`：初始化模型，支持手动设置p、d、q参数或启用自动调优模式；\n- `fit`：输入时间序列数据完成模型训练，自动完成数据校验与参数优化（若开启自动调优）；\n- `forecast`：生成未来指定步数的预测结果，返回预测值、置信区间及评估指标；\n- `plot_forecast`：可视化原始序列与预测结果，包含置信区间阴影。",
+    "content": "---\nname: 时间序列ARIMA预测模型\ndescription: 基于自回归积分滑动平均（ARIMA）模型的单变量时间序列预测工具，支持自动参数调优与手动参数配置，适用于销量、库存、经济指标等短期至中期趋势预测。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当用户需要对单变量时间序列数据进行预测时触发，场景包括但不限于月度销量预测、季度经济指标预测、库存需求预测等。\noutput_format: 包含预测值序列、95%置信区间、模型训练评估指标（MAE、RMSE）的结构化字典结果。\n---\n\n## 工作流程\n1. **数据准备**：加载单变量时间序列数据，确保数据为带datetime类型索引的Pandas Series或DataFrame，处理缺失值（插值/删除）与异常值。\n2. **平稳性处理**：通过ADF检验判断序列平稳性，若不平稳则进行差分操作确定d值。\n3. **参数选择**：\n   - 手动模式：通过ACF/PACF图分析确定AR阶数p和MA阶数q；\n   - 自动模式：使用AutoARIMA算法自动搜索最优p、d、q组合。\n4. **模型训练**：利用选定参数训练ARIMA模型，完成参数估计与残差检验。\n5. **模型评估**：计算训练集的MAE、RMSE指标，验证残差是否为白噪声。\n6. **预测输出**：生成指定未来步数的预测值及置信区间，支持可视化展示。\n\n## 约束条件\n1. 仅支持单变量时间序列数据，输入需包含连续的时间索引（如日、月、季度）。\n2. 模型适用于短期至中期预测，建议预测步数不超过原始序列长度的20%。\n3. 若序列存在明显季节性趋势，建议使用SARIMA模型替代本工具。\n4. 输入数据缺失值占比需低于5%，否则需先完成缺失值处理。\n\n## 工具使用\n本技能的ARIMA模型实现代码位于`scripts/model.py`，提供`ARIMAPredictor`类，核心功能如下：\n- `__init__`：初始化模型，支持手动设置p、d、q参数或启用自动调优模式；\n- `fit`：输入时间序列数据完成模型训练，自动完成数据校验与参数优化（若开启自动调优）；\n- `forecast`：生成未来指定步数的预测结果，返回预测值、置信区间及评估指标；\n- `plot_forecast`：可视化原始序列与预测结果，包含置信区间阴影。",
     "tags": [
       {
         "id": "t1",
@@ -34,7 +33,7 @@ tag: 数学建模\ntrigger: 当用户需要对单变量时间序列数据进行�
         "originalName": "arima_time_series_model.zip",
         "fileName": "arima_time_series_model.zip",
         "mimeType": "application/zip",
-        "size": 8779,
+        "size": 8803,
         "path": "/zip/arima_time_series_model.zip"
       }
     ]
@@ -47,8 +46,7 @@ tag: 数学建模\ntrigger: 当用户需要对单变量时间序列数据进行�
     "version": "1.0",
     "trigger": "[\"典型相关分析\", \"CCA\", \"两组变量相关性分析\", \"变量集合关联分析\", \"多变量组间相关性\"]",
     "output_format": "|",
-    "content": "---\nname: 典型相关分析\ndescription: 典型相关分析（CCA）是一种多元统计方法，用于探究两组变量集合之间的线性相关关系，识别并量化两组变量的潜在关联模式，广泛应用于心理学、经济学、生物学等领域的多变量数据分析。\nauthor: Doubao-1.8\nversion: 1.0
-tag: 数学建模\ntrigger: [\"典型相关分析\", \"CCA\", \"两组变量相关性分析\", \"变量集合关联分析\", \"多变量组间相关性\"]\noutput_format: |\n  1. 典型相关系数（按从大到小排序，反映每对典型变量的关联强度）\n  2. 典型载荷矩阵（原变量与对应典型变量的相关系数，解释原变量对典型变量的贡献）\n  3. 典型权重矩阵（计算典型变量的线性组合系数）\n  4. 典型变量得分（每组变量对应的典型变量取值）\n  5. 显著性检验结果（判断典型相关系数的统计显著性）\n---\n\n## 工作流程\n1. **数据准备**：收集两组连续型数值变量数据，确保无缺失值，样本量需满足n ≥ 5*(p+q)（p为第一组变量数，q为第二组变量数）。\n2. **数据标准化**：对两组变量分别进行标准化处理（均值为0，方差为1），消除量纲差异对分析结果的影响。\n3. **模型拟合**：使用典型相关分析算法拟合数据，计算典型相关系数、载荷、权重等核心指标。\n4. **结果解读**：分析典型相关系数的大小与显著性，通过典型载荷判断原变量与典型变量的关联程度，解释两组变量集合的潜在关联模式。\n5. **可视化（可选）**：绘制典型变量得分散点图，直观展示两组典型变量之间的线性关系。\n\n## 约束条件\n- 变量类型：两组变量必须为连续型数值变量，不支持分类变量或离散变量。\n- 样本量要求：样本数量需远大于两组变量总数，避免模型过拟合或结果不稳定。\n- 多重共线性：每组变量内部应避免严重的多重共线性问题，建议先进行共线性检验（如方差膨胀因子VIF）。\n- 数据完整性：输入数据需无缺失值，若存在缺失值需先进行插值或删除处理。\n\n## 工具使用\n典型相关分析的Python实现位于`scripts/model.py`中，提供了封装好的`CanonicalCorrelationAnalysis`类。使用时只需传入两组变量数据（支持Pandas DataFrame或NumPy数组），调用`fit()`方法完成模型拟合后，可通过类属性获取各类分析结果，或使用`get_results_summary()`方法获取结构化的结果摘要，便于快速解读。",
+    "content": "---\nname: 典型相关分析\ndescription: 典型相关分析（CCA）是一种多元统计方法，用于探究两组变量集合之间的线性相关关系，识别并量化两组变量的潜在关联模式，广泛应用于心理学、经济学、生物学等领域的多变量数据分析。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"典型相关分析\", \"CCA\", \"两组变量相关性分析\", \"变量集合关联分析\", \"多变量组间相关性\"]\noutput_format: |\n  1. 典型相关系数（按从大到小排序，反映每对典型变量的关联强度）\n  2. 典型载荷矩阵（原变量与对应典型变量的相关系数，解释原变量对典型变量的贡献）\n  3. 典型权重矩阵（计算典型变量的线性组合系数）\n  4. 典型变量得分（每组变量对应的典型变量取值）\n  5. 显著性检验结果（判断典型相关系数的统计显著性）\n---\n\n## 工作流程\n1. **数据准备**：收集两组连续型数值变量数据，确保无缺失值，样本量需满足n ≥ 5*(p+q)（p为第一组变量数，q为第二组变量数）。\n2. **数据标准化**：对两组变量分别进行标准化处理（均值为0，方差为1），消除量纲差异对分析结果的影响。\n3. **模型拟合**：使用典型相关分析算法拟合数据，计算典型相关系数、载荷、权重等核心指标。\n4. **结果解读**：分析典型相关系数的大小与显著性，通过典型载荷判断原变量与典型变量的关联程度，解释两组变量集合的潜在关联模式。\n5. **可视化（可选）**：绘制典型变量得分散点图，直观展示两组典型变量之间的线性关系。\n\n## 约束条件\n- 变量类型：两组变量必须为连续型数值变量，不支持分类变量或离散变量。\n- 样本量要求：样本数量需远大于两组变量总数，避免模型过拟合或结果不稳定。\n- 多重共线性：每组变量内部应避免严重的多重共线性问题，建议先进行共线性检验（如方差膨胀因子VIF）。\n- 数据完整性：输入数据需无缺失值，若存在缺失值需先进行插值或删除处理。\n\n## 工具使用\n典型相关分析的Python实现位于`scripts/model.py`中，提供了封装好的`CanonicalCorrelationAnalysis`类。使用时只需传入两组变量数据（支持Pandas DataFrame或NumPy数组），调用`fit()`方法完成模型拟合后，可通过类属性获取各类分析结果，或使用`get_results_summary()`方法获取结构化的结果摘要，便于快速解读。",
     "tags": [
       {
         "id": "t1",
@@ -74,7 +72,7 @@ tag: 数学建模\ntrigger: [\"典型相关分析\", \"CCA\", \"两组变量相�
         "originalName": "canonical_correlation_analysis.zip",
         "fileName": "canonical_correlation_analysis.zip",
         "mimeType": "application/zip",
-        "size": 8259,
+        "size": 8281,
         "path": "/zip/canonical_correlation_analysis.zip"
       }
     ]
@@ -87,8 +85,7 @@ tag: 数学建模\ntrigger: [\"典型相关分析\", \"CCA\", \"两组变量相�
     "version": "1.0",
     "trigger": "当需要分析两个分类变量是否存在关联时触发，例如判断不同群体的行为特征是否存在差异、分类变量间是否具有统计依赖性等。",
     "output_format": "包含卡方统计量、p值、自由度、期望频数及检验结论的结构化结果（如JSON格式）。",
-    "content": "---\nname: 分类变量独立性检验\ndescription: 用于检验两个分类变量之间是否存在统计独立性的假设检验方法，通过卡方检验实现，可应用于如性别与消费偏好、地区与疾病发病率等场景的相关性分析。\nauthor: Doubao-1.8\nversion: 1.0
-tag: 数学建模\ntrigger: 当需要分析两个分类变量是否存在关联时触发，例如判断不同群体的行为特征是否存在差异、分类变量间是否具有统计依赖性等。\noutput_format: 包含卡方统计量、p值、自由度、期望频数及检验结论的结构化结果（如JSON格式）。\n---\n\n## 工作流程\n1. **提出假设**：原假设H₀为两个分类变量相互独立；备择假设H₁为两个分类变量不独立（存在关联）。\n2. **构建列联表**：整理两个分类变量的观测频数，形成二维列联表。\n3. **计算期望频数**：每个单元格的期望频数计算公式为：$E_{ij} = \\frac{行合计_i \\times 列合计_j}{总样本量}$。\n4. **计算卡方统计量**：根据观测频数与期望频数的差异计算卡方统计量：$\\chi^2 = \\sum \\frac{(O_{ij} - E_{ij})^2}{E_{ij}}$，其中$O_{ij}$为观测频数，$E_{ij}$为期望频数。\n5. **确定自由度**：自由度$df = (行数-1) \\times (列数-1)$。\n6. **作出决策**：比较卡方统计量与临界值，或通过p值判断是否拒绝原假设（通常以p<0.05为显著性水平）。\n\n## 约束条件\n1. 样本量需满足列联表中大部分单元格的期望频数不小于5；若存在多个单元格期望频数小于5，建议使用Fisher精确检验等替代方法。\n2. 数据必须为分类变量，且观测值为频数数据。\n3. 所有观测值之间相互独立，无重复测量或配对关系。\n\n## 工具使用\n本方法的Python实现位于`scripts/model.py`，提供了`categorical_independence_test`函数，可直接传入列联表数据（支持二维列表或Pandas DataFrame格式），返回包含检验结果的结构化数据。",
+    "content": "---\nname: 分类变量独立性检验\ndescription: 用于检验两个分类变量之间是否存在统计独立性的假设检验方法，通过卡方检验实现，可应用于如性别与消费偏好、地区与疾病发病率等场景的相关性分析。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要分析两个分类变量是否存在关联时触发，例如判断不同群体的行为特征是否存在差异、分类变量间是否具有统计依赖性等。\noutput_format: 包含卡方统计量、p值、自由度、期望频数及检验结论的结构化结果（如JSON格式）。\n---\n\n## 工作流程\n1. **提出假设**：原假设H₀为两个分类变量相互独立；备择假设H₁为两个分类变量不独立（存在关联）。\n2. **构建列联表**：整理两个分类变量的观测频数，形成二维列联表。\n3. **计算期望频数**：每个单元格的期望频数计算公式为：$E_{ij} = \\frac{行合计_i \\times 列合计_j}{总样本量}$。\n4. **计算卡方统计量**：根据观测频数与期望频数的差异计算卡方统计量：$\\chi^2 = \\sum \\frac{(O_{ij} - E_{ij})^2}{E_{ij}}$，其中$O_{ij}$为观测频数，$E_{ij}$为期望频数。\n5. **确定自由度**：自由度$df = (行数-1) \\times (列数-1)$。\n6. **作出决策**：比较卡方统计量与临界值，或通过p值判断是否拒绝原假设（通常以p<0.05为显著性水平）。\n\n## 约束条件\n1. 样本量需满足列联表中大部分单元格的期望频数不小于5；若存在多个单元格期望频数小于5，建议使用Fisher精确检验等替代方法。\n2. 数据必须为分类变量，且观测值为频数数据。\n3. 所有观测值之间相互独立，无重复测量或配对关系。\n\n## 工具使用\n本方法的Python实现位于`scripts/model.py`，提供了`categorical_independence_test`函数，可直接传入列联表数据（支持二维列表或Pandas DataFrame格式），返回包含检验结果的结构化数据。",
     "tags": [
       {
         "id": "t1",
@@ -114,7 +111,7 @@ tag: 数学建模\ntrigger: 当需要分析两个分类变量是否存在关联�
         "originalName": "categorical_independence_test.zip",
         "fileName": "categorical_independence_test.zip",
         "mimeType": "application/zip",
-        "size": 5568,
+        "size": 5593,
         "path": "/zip/categorical_independence_test.zip"
       }
     ]
@@ -127,8 +124,7 @@ tag: 数学建模\ntrigger: 当需要分析两个分类变量是否存在关联�
     "version": "1.0",
     "trigger": "[\"聚类分析\", \"数据分组\", \"无监督分类\", \"簇划分\"]",
     "output_format": "|",
-    "content": "---\nname: 聚类分析\ndescription: 一种无监督学习方法，用于将相似的数据点自动分组到不同的簇中，适用于数据探索、客户细分、异常检测等场景。\nauthor: Doubao-1.8\nversion: 1.0
-tag: 数学建模\ntrigger: [\"聚类分析\", \"数据分组\", \"无监督分类\", \"簇划分\"]\noutput_format: |\n  {\n    \"cluster_labels\": [列表，每个样本的簇标签],\n    \"evaluation_metrics\": {\n      \"silhouette_score\": 数值（轮廓系数）,\n      \"calinski_harabasz_score\": 数值（CH指数）（仅适用于基于中心的算法）\n    },\n    \"algorithm_used\": \"使用的聚类算法名称\"\n  }\n---\n\n## 工作流程\n1. **数据预处理**：对输入数据进行缺失值填充、标准化/归一化处理，确保数据质量。\n2. **算法选择**：根据数据特性和业务需求选择合适的聚类算法（如K-Means适用于凸形簇，DBSCAN适用于密度不均匀的簇）。\n3. **参数调优**：通过网格搜索或肘部法则确定最优参数（如K-Means的簇数k，DBSCAN的eps和min_samples）。\n4. **模型训练**：使用预处理后的数据训练聚类模型。\n5. **结果评估**：利用轮廓系数、CH指数等指标评估聚类效果。\n6. **结果输出**：返回每个样本的簇标签及评估指标。\n\n## 约束条件\n- 仅适用于无监督学习场景，输入数据需无标签；\n- K-Means算法对异常值敏感，需先进行异常值检测与处理；\n- DBSCAN算法依赖于eps和min_samples参数的合理设置，对参数较为敏感；\n- 数据维度较高时建议先进行降维处理（如PCA）以提升聚类效果和效率。\n\n## 工具使用\n聚类分析的Python实现位于`scripts/model.py`，提供了`ClusteringAnalyzer`类，支持K-Means和DBSCAN两种常用聚类算法。该类封装了数据预处理、模型训练、结果评估及可视化等功能，可通过简单调用完成完整的聚类分析任务。",
+    "content": "---\nname: 聚类分析\ndescription: 一种无监督学习方法，用于将相似的数据点自动分组到不同的簇中，适用于数据探索、客户细分、异常检测等场景。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"聚类分析\", \"数据分组\", \"无监督分类\", \"簇划分\"]\noutput_format: |\n  {\n    \"cluster_labels\": [列表，每个样本的簇标签],\n    \"evaluation_metrics\": {\n      \"silhouette_score\": 数值（轮廓系数）,\n      \"calinski_harabasz_score\": 数值（CH指数）（仅适用于基于中心的算法）\n    },\n    \"algorithm_used\": \"使用的聚类算法名称\"\n  }\n---\n\n## 工作流程\n1. **数据预处理**：对输入数据进行缺失值填充、标准化/归一化处理，确保数据质量。\n2. **算法选择**：根据数据特性和业务需求选择合适的聚类算法（如K-Means适用于凸形簇，DBSCAN适用于密度不均匀的簇）。\n3. **参数调优**：通过网格搜索或肘部法则确定最优参数（如K-Means的簇数k，DBSCAN的eps和min_samples）。\n4. **模型训练**：使用预处理后的数据训练聚类模型。\n5. **结果评估**：利用轮廓系数、CH指数等指标评估聚类效果。\n6. **结果输出**：返回每个样本的簇标签及评估指标。\n\n## 约束条件\n- 仅适用于无监督学习场景，输入数据需无标签；\n- K-Means算法对异常值敏感，需先进行异常值检测与处理；\n- DBSCAN算法依赖于eps和min_samples参数的合理设置，对参数较为敏感；\n- 数据维度较高时建议先进行降维处理（如PCA）以提升聚类效果和效率。\n\n## 工具使用\n聚类分析的Python实现位于`scripts/model.py`，提供了`ClusteringAnalyzer`类，支持K-Means和DBSCAN两种常用聚类算法。该类封装了数据预处理、模型训练、结果评估及可视化等功能，可通过简单调用完成完整的聚类分析任务。",
     "tags": [
       {
         "id": "t1",
@@ -154,7 +150,7 @@ tag: 数学建模\ntrigger: [\"聚类分析\", \"数据分组\", \"无监督分�
         "originalName": "clustering_analysis.zip",
         "fileName": "clustering_analysis.zip",
         "mimeType": "application/zip",
-        "size": 7289,
+        "size": 7309,
         "path": "/zip/clustering_analysis.zip"
       }
     ]
@@ -167,8 +163,7 @@ tag: 数学建模\ntrigger: [\"聚类分析\", \"数据分组\", \"无监督分�
     "version": "1.0",
     "trigger": "[\"判别分析\", \"样本分类\", \"分类预测\", \"类别判别\", \"LDA\", \"QDA\"]",
     "output_format": "|",
-    "content": "---\nname: 判别分析\ndescription: 判别分析是一种经典的统计分类方法，通过构建判别函数将样本划分为预先定义的类别。它通过分析不同类别样本的特征差异，找到最优的分类边界，适用于监督学习场景下的分类任务，如客户分群、疾病诊断、信用评级等。\nauthor: Doubao-1.8\nversion: 1.0
-tag: 数学建模\ntrigger: [\"判别分析\", \"样本分类\", \"分类预测\", \"类别判别\", \"LDA\", \"QDA\"]\noutput_format: |\n  {\n    \"model_type\": \"string, 模型类型（如LDA/QDA）\",\n    \"predicted_labels\": \"list, 样本的预测类别\",\n    \"accuracy\": \"float, 模型分类准确率（若提供测试集）\",\n    \"discriminant_params\": \"dict, 判别函数的关键参数（如LDA的系数、截距，QDA的协方差矩阵）\"\n  }\n---\n\n## 工作流程\n1. **数据准备**：收集带有类别标签的样本数据，划分训练集与测试集；对数值型特征进行标准化处理，对分类特征进行编码（如独热编码），确保数据符合模型假设（如LDA要求的正态分布、方差齐性）。\n2. **模型选择**：根据数据特征选择合适的判别模型：\n   - 线性判别分析（LDA）：适用于类别间协方差矩阵相近的场景，分类边界为线性。\n   - 二次判别分析（QDA）：适用于类别间协方差矩阵差异较大的场景，分类边界为二次曲线。\n3. **模型训练**：使用训练集拟合判别模型，学习类别间的判别规则。\n4. **预测与评估**：对测试集样本进行分类预测，使用准确率、混淆矩阵、F1值等指标评估模型性能。\n5. **结果解释**：分析判别函数的参数（如特征系数），理解各特征对分类结果的贡献程度。\n\n## 约束条件\n1. **数据假设**：\n   - LDA要求各类别样本的特征服从多元正态分布，且协方差矩阵相等；\n   - QDA放松了协方差矩阵相等的假设，但仍要求特征服从多元正态分布。\n2. **样本量**：每个类别的样本数量应大于特征维度，避免模型过拟合；类别间样本量尽量均衡，否则需调整先验概率。\n3. **特征类型**：仅支持数值型特征，分类特征需提前转换为数值形式。\n4. **适用场景**：适用于监督分类任务，需有带标签的训练数据。\n\n## 工具使用\n本技能的实现代码位于`scripts/model.py`，提供了封装好的`DiscriminantAnalysis`类，支持LDA和QDA两种模型。使用步骤如下：\n1. 导入`DiscriminantAnalysis`类；\n2. 初始化模型并指定类型（LDA/QDA）；\n3. 调用`fit()`方法传入训练数据完成模型训练；\n4. 调用`predict()`方法对新样本进行分类；\n5. 调用`evaluate()`方法评估模型性能；\n6. 调用`get_discriminant_params()`方法获取判别函数的关键参数用于结果解释。",
+    "content": "---\nname: 判别分析\ndescription: 判别分析是一种经典的统计分类方法，通过构建判别函数将样本划分为预先定义的类别。它通过分析不同类别样本的特征差异，找到最优的分类边界，适用于监督学习场景下的分类任务，如客户分群、疾病诊断、信用评级等。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"判别分析\", \"样本分类\", \"分类预测\", \"类别判别\", \"LDA\", \"QDA\"]\noutput_format: |\n  {\n    \"model_type\": \"string, 模型类型（如LDA/QDA）\",\n    \"predicted_labels\": \"list, 样本的预测类别\",\n    \"accuracy\": \"float, 模型分类准确率（若提供测试集）\",\n    \"discriminant_params\": \"dict, 判别函数的关键参数（如LDA的系数、截距，QDA的协方差矩阵）\"\n  }\n---\n\n## 工作流程\n1. **数据准备**：收集带有类别标签的样本数据，划分训练集与测试集；对数值型特征进行标准化处理，对分类特征进行编码（如独热编码），确保数据符合模型假设（如LDA要求的正态分布、方差齐性）。\n2. **模型选择**：根据数据特征选择合适的判别模型：\n   - 线性判别分析（LDA）：适用于类别间协方差矩阵相近的场景，分类边界为线性。\n   - 二次判别分析（QDA）：适用于类别间协方差矩阵差异较大的场景，分类边界为二次曲线。\n3. **模型训练**：使用训练集拟合判别模型，学习类别间的判别规则。\n4. **预测与评估**：对测试集样本进行分类预测，使用准确率、混淆矩阵、F1值等指标评估模型性能。\n5. **结果解释**：分析判别函数的参数（如特征系数），理解各特征对分类结果的贡献程度。\n\n## 约束条件\n1. **数据假设**：\n   - LDA要求各类别样本的特征服从多元正态分布，且协方差矩阵相等；\n   - QDA放松了协方差矩阵相等的假设，但仍要求特征服从多元正态分布。\n2. **样本量**：每个类别的样本数量应大于特征维度，避免模型过拟合；类别间样本量尽量均衡，否则需调整先验概率。\n3. **特征类型**：仅支持数值型特征，分类特征需提前转换为数值形式。\n4. **适用场景**：适用于监督分类任务，需有带标签的训练数据。\n\n## 工具使用\n本技能的实现代码位于`scripts/model.py`，提供了封装好的`DiscriminantAnalysis`类，支持LDA和QDA两种模型。使用步骤如下：\n1. 导入`DiscriminantAnalysis`类；\n2. 初始化模型并指定类型（LDA/QDA）；\n3. 调用`fit()`方法传入训练数据完成模型训练；\n4. 调用`predict()`方法对新样本进行分类；\n5. 调用`evaluate()`方法评估模型性能；\n6. 调用`get_discriminant_params()`方法获取判别函数的关键参数用于结果解释。",
     "tags": [
       {
         "id": "t1",
@@ -194,8 +189,749 @@ tag: 数学建模\ntrigger: [\"判别分析\", \"样本分类\", \"分类预测\
         "originalName": "discriminant_analysis.zip",
         "fileName": "discriminant_analysis.zip",
         "mimeType": "application/zip",
-        "size": 7953,
+        "size": 7975,
         "path": "/zip/discriminant_analysis.zip"
+      }
+    ]
+  },
+  {
+    "id": "docx_reader",
+    "title": "DOCX文件读取工具",
+    "description": "用于读取DOCX文件内容，支持提取文本、段落信息和文档元数据，适用于需要处理Word文档的场景。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要读取DOCX文件内容时触发",
+    "output_format": "包含提取的文本内容、段落信息和元数据的JSON格式数据",
+    "content": "---\nname: DOCX文件读取工具\ndescription: 用于读取DOCX文件内容，支持提取文本、段落信息和文档元数据，适用于需要处理Word文档的场景。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 文档处理\ntrigger: 当需要读取DOCX文件内容时触发\noutput_format: 包含提取的文本内容、段落信息和元数据的JSON格式数据\n---\n\n## 工作流程\n1. **文件准备**：确保DOCX文件路径正确且文件可访问\n2. **内容提取**：调用工具读取DOCX文件的文本内容\n3. **元数据提取**：获取DOCX文件的基本信息（作者、创建时间、字数等）\n4. **结果输出**：返回结构化的文本内容和元数据信息\n\n## 约束条件\n- 输入必须为有效的DOCX文件路径\n- 不支持加密或损坏的DOCX文件\n- 不支持旧版DOC格式文件\n\n## 工具使用\n该DOCX读取工具的具体实现代码位于`scripts/model.py`，通过调用`DOCXReader`类可以完成DOCX文件的读取和内容提取。类中提供了以下核心方法：\n- `__init__`：初始化DOCX读取器\n- `extract_text`：提取DOCX文件的全部文本内容\n- `extract_metadata`：提取DOCX文件的元数据信息\n- `get_paragraphs`：获取DOCX文件的所有段落\n- `get_word_count`：获取DOCX文件的总字数\n- `extract_styles`：提取文档中使用的样式信息",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "文档处理"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-docx_reader",
+        "originalName": "docx_reader.zip",
+        "fileName": "docx_reader.zip",
+        "mimeType": "application/zip",
+        "size": 5233,
+        "path": "/zip/docx_reader.zip"
+      }
+    ]
+  },
+  {
+    "id": "factor_analysis_comprehensive_evaluation",
+    "title": "因子分析综合评价法",
+    "description": "一种多变量统计分析方法，通过提取公共因子简化多指标体系，结合因子方差贡献率计算综合得分，实现对评价对象的客观排序与评价",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "[\"因子分析\", \"综合评价\", \"多指标评价\", \"因子得分排名\", \"公共因子提取\"]",
+    "output_format": ">",
+    "content": "---\nname: 因子分析综合评价法\ndescription: 一种多变量统计分析方法，通过提取公共因子简化多指标体系，结合因子方差贡献率计算综合得分，实现对评价对象的客观排序与评价\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"因子分析\", \"综合评价\", \"多指标评价\", \"因子得分排名\", \"公共因子提取\"]\noutput_format: >\n  JSON格式，包含适用性检验结果、因子载荷矩阵、因子方差解释、因子得分、综合得分及排名等信息\n---\n\n## 工作流程\n1. **数据预处理**：对输入的多指标数据进行标准化处理以消除量纲差异，处理缺失值（删除或插补）\n2. **适用性检验**：执行KMO检验和巴特利特球形检验，验证数据是否适合进行因子分析\n3. **公共因子提取**：通过主成分分析法或极大似然法提取公共因子，根据特征值准则确定最优因子个数\n4. **因子旋转**：采用方差最大化旋转等方法优化因子载荷矩阵，提升公共因子的可解释性\n5. **因子得分计算**：基于回归法计算每个评价对象的各公共因子得分\n6. **综合评价**：以各因子的方差贡献率为权重，计算综合得分并对评价对象进行排名\n\n## 约束条件\n- 输入数据需为连续型数值变量，不适用于分类变量\n- 样本量应满足至少为变量数的5倍，以保证分析结果的稳定性\n- 变量之间需存在一定相关性，若变量独立则不适合因子分析\n- KMO检验值应大于0.6且巴特利特球形检验P值小于0.05，否则分析效果可能较差\n\n## 工具使用\n该方法的Python实现位于`scripts/model.py`，可调用其中的`factor_analysis_comprehensive_evaluation`函数，传入评价数据集及可选参数（因子个数、旋转方法），即可获取完整的综合评价结果。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-factor_analysis_comprehensive_evaluation",
+        "originalName": "factor_analysis_comprehensive_evaluation.zip",
+        "fileName": "factor_analysis_comprehensive_evaluation.zip",
+        "mimeType": "application/zip",
+        "size": 6796,
+        "path": "/zip/factor_analysis_comprehensive_evaluation.zip"
+      }
+    ]
+  },
+  {
+    "id": "fuzzy_comprehensive_evaluation",
+    "title": "模糊综合评价法",
+    "description": "一种基于模糊数学的多因素决策分析方法，用于解决受多个模糊因素影响的评价问题，如产品质量评估、绩效评价、方案优选等。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要对包含多个模糊影响因素的对象进行综合评价时触发，例如：\"帮我用模糊综合评价法评估学生的综合表现\"、\"如何用模糊数学方法进行产品质量评级\"",
+    "output_format": "|",
+    "content": "---\nname: 模糊综合评价法\ndescription: 一种基于模糊数学的多因素决策分析方法，用于解决受多个模糊因素影响的评价问题，如产品质量评估、绩效评价、方案优选等。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要对包含多个模糊影响因素的对象进行综合评价时触发，例如：\"帮我用模糊综合评价法评估学生的综合表现\"、\"如何用模糊数学方法进行产品质量评级\"\noutput_format: |\n  {\n    \"comprehensive_vector\": 归一化后的综合评价向量,\n    \"evaluation_result\": 最终评价等级（基于最大隶属度原则）,\n    \"used_operator\": 所使用的模糊算子类型\n  }\n---\n\n## 工作流程\n1. **确定评价因素集U**：明确影响评价对象的主要因素，如U = {u1, u2, ..., un}。\n2. **建立评价集V**：设定评价的等级标准，如V = {v1, v2, ..., vm}。\n3. **构造模糊判断矩阵R**：通过专家评分或数据统计，确定每个因素对各评价等级的隶属度，形成n×m的矩阵R。\n4. **确定因素权重集A**：采用层次分析法(AHP)、熵权法或专家打分法确定各因素的权重，满足ΣAi = 1。\n5. **计算综合模糊评价向量B**：通过模糊算子将权重集A与判断矩阵R合成，得到B = A ∘ R。\n6. **归一化与结果分析**：对B进行归一化处理，根据最大隶属度原则或加权平均法确定最终评价结果。\n\n## 约束条件\n1. 评价因素应具有一定独立性，避免重叠影响。\n2. 权重集需满足归一化条件（权重之和为1）。\n3. 模糊判断矩阵的隶属度取值需在[0,1]区间内。\n4. 模糊算子的选择需根据实际问题场景确定，不同算子会导致不同的评价结果。\n5. 适用于多因素、模糊性较强的评价问题，不适用于因素清晰、量化明确的场景。\n\n## 工具使用\n本方法的Python实现已封装在`scripts/model.py`中，可通过导入其中的`fuzzy_comprehensive_evaluation`函数执行模糊综合评价。函数接收权重向量、模糊判断矩阵、评价集及可选的模糊算子类型作为输入，返回包含综合评价向量和最终评价结果的字典。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-fuzzy_comprehensive_evaluation",
+        "originalName": "fuzzy_comprehensive_evaluation.zip",
+        "fileName": "fuzzy_comprehensive_evaluation.zip",
+        "mimeType": "application/zip",
+        "size": 6184,
+        "path": "/zip/fuzzy_comprehensive_evaluation.zip"
+      }
+    ]
+  },
+  {
+    "id": "grey_prediction",
+    "title": "灰色预测模型",
+    "description": "灰色预测模型是一种针对小样本、贫信息系统的预测方法，适用于数据量少、信息不足但具有一定趋势的预测场景，如经济预测、产量预测等。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "[\"灰色预测\", \"GM(1,1)\", \"小样本预测\", \"贫信息预测\"]",
+    "output_format": "|",
+    "content": "---\nname: 灰色预测模型\ndescription: 灰色预测模型是一种针对小样本、贫信息系统的预测方法，适用于数据量少、信息不足但具有一定趋势的预测场景，如经济预测、产量预测等。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"灰色预测\", \"GM(1,1)\", \"小样本预测\", \"贫信息预测\"]\noutput_format: |\n  {\n    \"原始数据\": list,\n    \"拟合数据\": list,\n    \"预测结果\": list,\n    \"精度检验\": {\n      \"后验差比c\": float,\n      \"小误差概率p\": float,\n      \"精度等级\": string\n    }\n  }\n---\n\n## 工作流程\n1. **数据预处理**：检查输入序列是否为非负序列，若存在负数则抛出异常。\n2. **累加生成(AGO)**：对原始数据进行一次累加生成，得到新的序列以弱化随机性。\n3. **模型构建**：建立GM(1,1)的微分方程模型，构造矩阵B和Y。\n4. **参数求解**：通过最小二乘法求解模型的发展系数a和灰作用量b。\n5. **拟合与预测**：利用求解得到的参数生成拟合数据，并预测未来指定步数的数值。\n6. **精度检验**：采用后验差检验方法评估模型精度，划分精度等级。\n\n## 约束条件\n1. 输入数据必须为非负数值序列，样本量通常在3-10之间。\n2. 序列应具有一定的指数增长趋势，若序列波动过大则模型精度可能下降。\n3. 不适用于具有周期性或突变性的序列预测。\n\n## 工具使用\n本技能的Python实现位于`scripts/model.py`，通过`GreyPrediction`类提供完整的灰色预测功能，包括模型训练、预测和精度检验。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-grey_prediction",
+        "originalName": "grey_prediction.zip",
+        "fileName": "grey_prediction.zip",
+        "mimeType": "application/zip",
+        "size": 6482,
+        "path": "/zip/grey_prediction.zip"
+      }
+    ]
+  },
+  {
+    "id": "grey_relational_analysis",
+    "title": "灰色关联分析",
+    "description": "灰色关联分析是一种用于分析不完全信息系统中各因素之间关联程度的量化分析方法，适用于样本量少、数据信息不足的场景，能够有效揭示因素间的主次关系。",
+    "author": "数学建模助手",
+    "version": "1.0",
+    "trigger": "当需要分析多个影响因素与目标因素之间的关联程度，且数据样本量较小或信息不完全时，触发该技能。",
+    "output_format": "|",
+    "content": "---\nname: 灰色关联分析\ndescription: 灰色关联分析是一种用于分析不完全信息系统中各因素之间关联程度的量化分析方法，适用于样本量少、数据信息不足的场景，能够有效揭示因素间的主次关系。\nauthor: 数学建模助手\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要分析多个影响因素与目标因素之间的关联程度，且数据样本量较小或信息不完全时，触发该技能。\noutput_format: |\n  {\n    \"relational_degrees\": {\"因素1\": 关联度值, \"因素2\": 关联度值, ...},\n    \"rankings\": [\"因素1\", \"因素2\", ...]  # 按关联度从高到低排序\n  }\n---\n\n## 工作流程\n1. **数据预处理**：对原始数据进行无量纲化处理，消除指标间的量纲差异，常用方法包括均值化、初值化、区间化等，根据指标类型（越大越好、越小越好、适中越好）选择合适的归一化方式。\n2. **确定参考序列**：选择反映系统行为特征的最优序列作为参考序列，通常为目标因素的归一化数据。\n3. **计算灰色关联系数**：根据各比较序列与参考序列的差值，结合分辨系数计算关联系数。\n4. **计算灰色关联度**：对各因素的关联系数进行平均，得到该因素与参考序列的关联度。\n5. **关联度排序**：根据关联度大小对各影响因素进行排序，关联度越大说明与目标因素的关联程度越高。\n\n## 约束条件\n1. 输入数据应为非负数值型数据，无缺失值；\n2. 参考序列需为反映系统最优状态的序列，通常选择目标指标的归一化数据；\n3. 归一化方法需根据指标的性质（正向指标、负向指标、适度指标）合理选择；\n4. 分辨系数通常取0.5，可根据实际情况调整（范围0-1）。\n\n## 工具使用\n本技能的Python实现位于`scripts/model.py`，提供了`grey_relational_analysis`函数，可直接调用进行灰色关联分析。函数支持输入DataFrame或numpy数组，自动处理数据归一化、关联系数计算及关联度排序。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "数学建模助手",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-grey_relational_analysis",
+        "originalName": "grey_relational_analysis.zip",
+        "fileName": "grey_relational_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 6544,
+        "path": "/zip/grey_relational_analysis.zip"
+      }
+    ]
+  },
+  {
+    "id": "markov_chain_sequence_prediction",
+    "title": "随机序列的Markov链预测",
+    "description": "基于马尔可夫链模型对具有马尔可夫性的离散随机序列进行状态预测，通过构建状态转移概率矩阵，利用当前状态预测下一时刻的可能状态及概率分布。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要对离散状态随机序列进行短期预测，且序列满足马尔可夫性（未来状态仅依赖当前状态）时触发",
+    "output_format": "JSON格式，包含预测的下一状态、各状态的预测概率、状态转移概率矩阵及状态空间列表",
+    "content": "---\nname: 随机序列的Markov链预测\ndescription: 基于马尔可夫链模型对具有马尔可夫性的离散随机序列进行状态预测，通过构建状态转移概率矩阵，利用当前状态预测下一时刻的可能状态及概率分布。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要对离散状态随机序列进行短期预测，且序列满足马尔可夫性（未来状态仅依赖当前状态）时触发\noutput_format: JSON格式，包含预测的下一状态、各状态的预测概率、状态转移概率矩阵及状态空间列表\n---\n\n## 工作流程\n1. **数据预处理**：将原始随机序列转换为有限离散的状态序列，确保状态定义清晰且无歧义。\n2. **构建状态转移概率矩阵**：统计历史序列中所有状态间的转移频率，并归一化得到转移概率。\n3. **确定初始状态**：获取当前时刻的状态作为预测的起始状态。\n4. **执行预测计算**：利用转移概率矩阵计算当前状态下各可能下一状态的概率，选择概率最高的状态作为预测结果。\n5. **结果输出**：返回预测状态、概率分布及转移矩阵等信息。\n\n## 约束条件\n- 序列必须满足马尔可夫性，即未来状态的概率分布仅依赖于当前状态，与过去的历史状态无关。\n- 状态空间必须是有限且离散的，不支持连续值或无限状态的序列。\n- 历史数据量需足够大，以保证状态转移概率矩阵的统计可靠性，避免因数据不足导致的概率偏差。\n- 仅适用于短期状态预测，长期预测的误差会随预测步数增加而显著增大。\n\n## 工具使用\n马尔可夫链预测的核心实现代码位于`scripts/model.py`，可通过导入该模块中的`MarkovChainPredictor`类来使用。该类封装了状态转移矩阵构建、状态预测等功能，支持输入离散状态序列完成模型训练，并基于当前状态输出预测结果。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-markov_chain_sequence_prediction",
+        "originalName": "markov_chain_sequence_prediction.zip",
+        "fileName": "markov_chain_sequence_prediction.zip",
+        "mimeType": "application/zip",
+        "size": 5901,
+        "path": "/zip/markov_chain_sequence_prediction.zip"
+      }
+    ]
+  },
+  {
+    "id": "mathematical_programming_modeling",
+    "title": "数学规划建模",
+    "description": "用于构建和求解各类数学规划问题（包括线性规划、整数规划、非线性规划等）的建模工具，支持定义目标函数、约束条件并求解最优解。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "",
+    "output_format": "|",
+    "content": "---\nname: 数学规划建模\ndescription: 用于构建和求解各类数学规划问题（包括线性规划、整数规划、非线性规划等）的建模工具，支持定义目标函数、约束条件并求解最优解。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger:\n  - \"进行数学规划建模\"\n  - \"求解优化问题\"\n  - \"构建线性规划模型\"\n  - \"寻找最优解\"\noutput_format: |\n  {\n    \"model_type\": \"string, 模型类型（如线性规划、整数规划）\",\n    \"objective_function\": \"string, 目标函数表达式\",\n    \"constraints\": [\"string, 约束条件列表\"],\n    \"optimal_solution\": {\"variable_name\": value},\n    \"optimal_value\": number,\n    \"status\": \"string, 求解状态（如最优解找到、无可行解等）\"\n  }\n---\n\n## 工作流程\n1. **问题定义**：明确优化目标（最大化/最小化）、决策变量及其含义。\n2. **模型构建**：\n   - 定义决策变量的类型（连续、整数、二进制）和取值范围。\n   - 编写目标函数的数学表达式。\n   - 列出所有约束条件（等式或不等式）。\n3. **模型求解**：调用求解器对构建好的数学规划模型进行求解。\n4. **结果分析**：解析求解结果，验证最优解的合理性，输出决策建议。\n\n## 约束条件\n- 必须明确目标函数的优化方向（最大化或最小化）。\n- 决策变量的类型和取值范围需清晰定义（如非负约束、整数约束等）。\n- 约束条件需符合数学逻辑，确保模型存在可行解或能被求解器处理。\n- 对于非线性规划问题，需确保目标函数和约束条件的可微性（部分求解器要求）。\n\n## 工具使用\n本技能的核心实现位于 `scripts/model.py`，提供了封装好的类 `MathematicalProgrammingModel`，支持快速构建各类数学规划模型并调用求解器求解。用户可通过该类的方法添加变量、设置目标函数、添加约束条件，并执行求解操作。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-mathematical_programming_modeling",
+        "originalName": "mathematical_programming_modeling.zip",
+        "fileName": "mathematical_programming_modeling.zip",
+        "mimeType": "application/zip",
+        "size": 6535,
+        "path": "/zip/mathematical_programming_modeling.zip"
+      }
+    ]
+  },
+  {
+    "id": "nonparametric_statistics",
+    "title": "非参数统计分析工具",
+    "description": "提供多种常用非参数统计检验方法的实现，适用于不满足正态分布假设的数据集，包括Mann-Whitney U检验、Wilcoxon符号秩检验、Kruskal-Wallis H检验等，帮助用户进行稳健的统计推断。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当用户需要对不满足正态分布的数据集进行统计检验，或提及非参数统计、Mann-Whitney、Wilcoxon、Kruskal-Wallis等关键词时触发。",
+    "output_format": "JSON格式，包含检验类型、统计量、p值、备择假设及专业结论。",
+    "content": "---\nname: 非参数统计分析工具\ndescription: 提供多种常用非参数统计检验方法的实现，适用于不满足正态分布假设的数据集，包括Mann-Whitney U检验、Wilcoxon符号秩检验、Kruskal-Wallis H检验等，帮助用户进行稳健的统计推断。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当用户需要对不满足正态分布的数据集进行统计检验，或提及非参数统计、Mann-Whitney、Wilcoxon、Kruskal-Wallis等关键词时触发。\noutput_format: JSON格式，包含检验类型、统计量、p值、备择假设及专业结论。\n---\n\n## Workflow\n1. **需求确认**：明确用户需要进行的非参数检验类型（两独立样本、配对样本、多独立样本等）。\n2. **数据准备**：收集并整理符合检验要求的数值型数据集，提前处理缺失值和异常值。\n3. **工具调用**：根据检验类型调用`scripts/model.py`中的对应函数，传入预处理后的数据集。\n4. **结果解析**：根据输出的统计量和p值，结合显著性水平判断是否拒绝原假设，生成专业统计结论。\n\n## Constraints\n- 数据需符合对应非参数检验的前提条件：\n  - Mann-Whitney U检验：两组样本相互独立，样本来自连续分布或有序分类分布。\n  - Wilcoxon符号秩检验：配对样本差值的分布对称，无方向偏倚。\n  - Kruskal-Wallis H检验：多组样本相互独立，各组样本来自相同类型的分布。\n- 样本量需满足检验的基本要求：如Wilcoxon符号秩检验通常要求样本量n≥5，Kruskal-Wallis H检验要求每组样本量≥3。\n- 输入数据应为数值型（整数或浮点数），避免包含非数值型数据和缺失值。\n\n## Tool Usage\n本工具的Python实现位于`scripts/model.py`，包含三个核心函数：\n- `mann_whitney_u_test`：执行Mann-Whitney U检验，用于比较两独立样本的中位数差异。\n- `wilcoxon_signed_rank_test`：执行Wilcoxon符号秩检验，用于比较配对样本的中位数差异。\n- `kruskal_wallis_h_test`：执行Kruskal-Wallis H检验，用于比较多独立样本的中位数差异。\n用户可根据具体需求调用对应函数，传入符合要求的数据集参数即可获取检验结果。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-nonparametric_statistics",
+        "originalName": "nonparametric_statistics.zip",
+        "fileName": "nonparametric_statistics.zip",
+        "mimeType": "application/zip",
+        "size": 6136,
+        "path": "/zip/nonparametric_statistics.zip"
+      }
+    ]
+  },
+  {
+    "id": "one_way_anova",
+    "title": "单因素方差分析",
+    "description": "用于分析单个因素下多个组别之间的均值是否存在显著差异的统计方法，通过比较组间方差和组内方差判断因素对结果的影响是否显著。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "[\"单因素方差分析\", \"ANOVA\", \"多组均值比较\", \"组间差异显著性检验\"]",
+    "output_format": "|",
+    "content": "---\nname: 单因素方差分析\ndescription: 用于分析单个因素下多个组别之间的均值是否存在显著差异的统计方法，通过比较组间方差和组内方差判断因素对结果的影响是否显著。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"单因素方差分析\", \"ANOVA\", \"多组均值比较\", \"组间差异显著性检验\"]\noutput_format: |\n  1. 方差分析结果：F值、P值\n  2. 假设检验结果：正态性检验、方差齐性检验结论\n  3. 最终结论：因素对各组均值是否存在显著影响（基于P值与显著性水平α=0.05的比较）\n---\n\n## 工作流程\n1. **数据准备**：整理单个因素下不同组别的样本数据，确保每组数据为数值型。\n2. **假设验证**：\n   - 正态性检验：检查每组数据是否服从正态分布。\n   - 方差齐性检验：检查各组数据的方差是否相等。\n3. **方差分析计算**：计算组间平方和、组内平方和、自由度、均方以及F统计量和P值。\n4. **结果解读**：根据P值判断因素对各组均值的影响是否显著，若假设不满足需考虑使用替代方法（如Welch ANOVA）。\n\n## 约束条件\n1. 至少需要3个及以上的组别。\n2. 每个组别样本量应不小于1，建议每组样本量尽量均衡。\n3. 数据需满足正态性和方差齐性假设；若假设不成立，需调整分析方法（如Welch检验）。\n4. 样本需为独立随机样本。\n\n## 工具使用\n本方法的Python实现位于`scripts/model.py`，可导入其中的`OneWayANOVA`类，传入分组数据后调用相关方法完成分析。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-one_way_anova",
+        "originalName": "one_way_anova.zip",
+        "fileName": "one_way_anova.zip",
+        "mimeType": "application/zip",
+        "size": 6818,
+        "path": "/zip/one_way_anova.zip"
+      }
+    ]
+  },
+  {
+    "id": "path_analysis",
+    "title": "通径分析",
+    "description": "通径分析是一种用于分析变量间直接效应与间接效应的统计方法，通过分解相关系数为直接作用和间接作用，揭示变量间的因果关系和影响路径，常用于农业、经济学等领域的多变量关系研究。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "[\"通径分析\", \"路径分析\", \"直接效应\", \"间接效应\", \"变量影响路径\"]",
+    "output_format": "|",
+    "content": "---\nname: 通径分析\ndescription: 通径分析是一种用于分析变量间直接效应与间接效应的统计方法，通过分解相关系数为直接作用和间接作用，揭示变量间的因果关系和影响路径，常用于农业、经济学等领域的多变量关系研究。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: [\"通径分析\", \"路径分析\", \"直接效应\", \"间接效应\", \"变量影响路径\"]\noutput_format: |\n  {\n    \"相关系数矩阵\": \"各变量间的Pearson相关系数\",\n    \"通径系数\": \"自变量对因变量的直接作用系数\",\n    \"直接效应\": \"自变量对因变量的直接影响程度\",\n    \"间接效应\": \"自变量通过其他变量对因变量的间接影响程度\",\n    \"总效应\": \"直接效应与间接效应之和\"\n  }\n---\n\n## Workflow\n1. **数据准备**：收集包含自变量和因变量的定量数据集，确保无缺失值或异常值，变量间存在线性关系。\n2. **计算相关系数矩阵**：计算所有变量（自变量和因变量）之间的Pearson相关系数。\n3. **估计通径系数**：通过多元线性回归模型，求解自变量对因变量的通径系数（即回归系数）。\n4. **效应分解**：将自变量与因变量的相关系数分解为直接效应（通径系数）和间接效应（通过其他变量传递的影响）。\n5. **结果验证**：检查模型的拟合优度（如R²）和多重共线性（VIF值），验证通径分析结果的合理性。\n6. **结果输出**：输出相关系数矩阵、通径系数、直接效应、间接效应及总效应。\n\n## Constraints\n1. 所有变量必须为连续型定量变量，分类变量需先进行编码转换。\n2. 样本量应足够大（建议至少为变量数的10倍以上），以保证结果的稳定性。\n3. 变量间应避免严重的多重共线性（方差膨胀因子VIF<10），否则会影响通径系数的估计精度。\n4. 假设变量间存在线性关系，若为非线性关系需先进行变量变换。\n\n## Tool Usage\n通径分析的Python实现位于`scripts/model.py`，可通过导入`PathAnalysis`类进行调用。具体步骤如下：\n1. 准备包含自变量和因变量的Pandas DataFrame。\n2. 实例化`PathAnalysis`类，传入数据集、自变量列表和因变量名称。\n3. 调用`get_full_results()`方法获取完整分析结果，包含相关系数矩阵、通径系数、直接效应、间接效应、总效应、模型拟合优度及多重共线性检查结果。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-path_analysis",
+        "originalName": "path_analysis.zip",
+        "fileName": "path_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 8100,
+        "path": "/zip/path_analysis.zip"
+      }
+    ]
+  },
+  {
+    "id": "pdf_reader",
+    "title": "PDF文件读取工具",
+    "description": "用于读取PDF文件内容，支持提取文本、页面信息和元数据，适用于需要处理PDF文档的场景。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要读取PDF文件内容时触发",
+    "output_format": "包含提取的文本内容、页面信息和元数据的JSON格式数据",
+    "content": "---\nname: PDF文件读取工具\ndescription: 用于读取PDF文件内容，支持提取文本、页面信息和元数据，适用于需要处理PDF文档的场景。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 文档处理\ntrigger: 当需要读取PDF文件内容时触发\noutput_format: 包含提取的文本内容、页面信息和元数据的JSON格式数据\n---\n\n## 工作流程\n1. **文件准备**：确保PDF文件路径正确且文件可访问\n2. **内容提取**：调用工具读取PDF文件的文本内容\n3. **元数据提取**：获取PDF文件的基本信息（作者、创建时间、页数等）\n4. **结果输出**：返回结构化的文本内容和元数据信息\n\n## 约束条件\n- 输入必须为有效的PDF文件路径\n- 不支持加密或损坏的PDF文件\n- 扫描版PDF无法提取文本内容\n\n## 工具使用\n该PDF读取工具的具体实现代码位于`scripts/model.py`，通过调用`PDFReader`类可以完成PDF文件的读取和内容提取。类中提供了以下核心方法：\n- `__init__`：初始化PDF读取器\n- `extract_text`：提取PDF文件的全部文本内容\n- `extract_metadata`：提取PDF文件的元数据信息\n- `get_page_count`：获取PDF文件的总页数\n- `extract_page_text`：提取指定页面的文本内容",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "文档处理"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-pdf_reader",
+        "originalName": "pdf_reader.zip",
+        "fileName": "pdf_reader.zip",
+        "mimeType": "application/zip",
+        "size": 7501,
+        "path": "/zip/pdf_reader.zip"
+      }
+    ]
+  },
+  {
+    "id": "principal_component_analysis",
+    "title": "主成分分析（PCA）",
+    "description": "主成分分析是一种常用的降维技术，通过线性变换将高维数据转换为低维数据，同时保留数据的主要方差信息，用于数据压缩、特征提取和可视化等场景。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要对高维数据进行降维处理、提取关键特征或进行数据可视化时触发此技能。",
+    "output_format": "包含降维后的数据、主成分方差贡献率、累计方差贡献率等结果的字典或DataFrame。",
+    "content": "---\nname: 主成分分析（PCA）\ndescription: 主成分分析是一种常用的降维技术，通过线性变换将高维数据转换为低维数据，同时保留数据的主要方差信息，用于数据压缩、特征提取和可视化等场景。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要对高维数据进行降维处理、提取关键特征或进行数据可视化时触发此技能。\noutput_format: 包含降维后的数据、主成分方差贡献率、累计方差贡献率等结果的字典或DataFrame。\n---\n\n## 工作流程\n1. 数据预处理：对输入数据进行标准化或归一化处理，确保各特征尺度一致。\n2. 计算协方差矩阵：基于预处理后的数据计算协方差矩阵，反映特征间的线性相关程度。\n3. 求解特征值与特征向量：对协方差矩阵进行特征分解，得到特征值和对应的特征向量。\n4. 选择主成分：根据特征值从大到小排序，选择前k个特征向量（主成分），通常根据累计方差贡献率确定k值（如累计贡献率≥85%）。\n5. 数据转换：将原始数据投影到选定的主成分上，得到降维后的数据。\n6. 结果分析：输出降维后的数据、各主成分的方差贡献率及累计贡献率，用于后续分析或可视化。\n\n## 约束条件\n- 输入数据需为数值型数据，无缺失值（或已完成缺失值处理）。\n- 数据需进行标准化处理，避免量纲差异对结果的影响。\n- 主成分的解释性可能较弱，需结合业务场景进行分析。\n- 当数据特征间线性相关性较低时，PCA降维效果可能不佳。\n\n## 工具使用\n此技能的Python实现位于 `scripts/model.py` 中，提供了封装好的PCA类，支持数据预处理、主成分选择、数据转换等功能。可通过调用类的方法完成完整的PCA分析流程，包括拟合模型、转换数据以及获取关键模型参数。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-principal_component_analysis",
+        "originalName": "principal_component_analysis.zip",
+        "fileName": "principal_component_analysis.zip",
+        "mimeType": "application/zip",
+        "size": 6310,
+        "path": "/zip/principal_component_analysis.zip"
+      }
+    ]
+  },
+  {
+    "id": "regression_model",
+    "title": "回归模型建模工具",
+    "description": "用于构建和训练多种回归模型（包括线性回归、岭回归、Lasso回归、逻辑回归），支持数据预处理、模型训练、性能评估及新数据预测，适用于连续值预测和分类任务。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要进行回归分析、预测连续目标变量或二分类/多分类目标变量时触发",
+    "output_format": "包含模型参数、训练/测试评估指标、预测结果的JSON格式数据",
+    "content": "---\nname: 回归模型建模工具\ndescription: 用于构建和训练多种回归模型（包括线性回归、岭回归、Lasso回归、逻辑回归），支持数据预处理、模型训练、性能评估及新数据预测，适用于连续值预测和分类任务。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要进行回归分析、预测连续目标变量或二分类/多分类目标变量时触发\noutput_format: 包含模型参数、训练/测试评估指标、预测结果的JSON格式数据\n---\n\n## 工作流程\n1. **数据准备**：收集结构化输入特征数据和对应目标变量，确保数据为数值型或可转换为数值型的格式。\n2. **数据预处理**：对数据进行缺失值填充、标准化/归一化处理，可选特征选择以优化模型输入。\n3. **模型选择**：根据任务类型（连续预测/分类）和数据特性选择合适的回归模型（线性、岭、Lasso、逻辑回归）。\n4. **模型训练**：使用划分的训练数据集拟合模型参数，同时验证模型在测试集上的性能。\n5. **模型评估**：通过R²分数、均方误差（MSE）、准确率等指标评估模型效果，调整超参数优化性能。\n6. **预测应用**：使用训练完成的模型对新输入数据进行预测，输出结果。\n\n## 约束条件\n- 输入数据需为结构化表格形式，特征和目标变量需为数值型（分类变量需提前编码）。\n- 逻辑回归仅支持二分类或多分类任务，目标变量需为离散标签。\n- 数据需经过基本清洗，避免大量缺失值或极端异常值影响模型训练效果。\n- 当使用岭回归或Lasso回归时，需合理设置正则化参数以平衡模型拟合和泛化能力。\n\n## 工具使用\n该回归模型的具体实现代码位于`scripts/model.py`，通过调用`RegressionModel`类可以完成模型的初始化、训练、评估和预测全流程。类中提供了以下核心方法：\n- `__init__`：初始化模型，指定模型类型及超参数\n- `train`：划分数据集并训练模型，返回训练和测试的评估指标\n- `predict`：使用训练好的模型对新数据进行预测\n- `preprocess_data`：对数据进行标准化预处理",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-regression_model",
+        "originalName": "regression_model.zip",
+        "fileName": "regression_model.zip",
+        "mimeType": "application/zip",
+        "size": 7996,
+        "path": "/zip/regression_model.zip"
+      }
+    ]
+  },
+  {
+    "id": "time_series_normality_test",
+    "title": "时间序列数据的正态性检验",
+    "description": "用于检验时间序列数据是否服从正态分布的工具，提供多种统计检验方法（Shapiro-Wilk、Kolmogorov-Smirnov、Jarque-Bera）及可视化（Q-Q图），帮助判断数据是否满足正态性假设，为后续统计分析提供依据。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "",
+    "output_format": "|",
+    "content": "---\nname: 时间序列数据的正态性检验\ndescription: 用于检验时间序列数据是否服从正态分布的工具，提供多种统计检验方法（Shapiro-Wilk、Kolmogorov-Smirnov、Jarque-Bera）及可视化（Q-Q图），帮助判断数据是否满足正态性假设，为后续统计分析提供依据。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger:\n  - 检验时间序列正态性\n  - 时间序列是否服从正态分布\n  - 时间序列数据正态性检验\n  - 判断时间序列数据分布类型\noutput_format: |\n  {\n      \"shapiro_wilk\": {\"statistic\": 数值, \"p_value\": 数值, \"conclusion\": \"结论\"},\n      \"kolmogorov_smirnov\": {\"statistic\": 数值, \"p_value\": 数值, \"conclusion\": \"结论\"},\n      \"jarque_bera\": {\"statistic\": 数值, \"p_value\": 数值, \"conclusion\": \"结论\"},\n      \"qq_plot\": \"生成状态\",\n      \"overall_conclusion\": \"综合结论\",\n      \"significance_level\": 显著性水平\n  }\n---\n\n## 工作流程\n1. **数据输入**：提供待检验的时间序列数据（支持Pandas Series或Numpy数组格式）。\n2. **数据预处理**：自动检查并提示缺失值（需用户预先处理缺失数据）。\n3. **检验方法选择**：根据样本量自动适配检验方法，包括：\n   - Shapiro-Wilk检验（适用于样本量≤5000的小样本）\n   - Kolmogorov-Smirnov检验（适用于大样本，使用样本均值和标准差作为参数估计）\n   - Jarque-Bera检验（基于偏度和峰度的检验）\n4. **执行检验**：计算各检验的统计量和p值，生成Q-Q图（可选）。\n5. **结果输出**：返回各检验的详细结果及综合结论，判断数据是否服从正态分布。\n\n## 约束条件\n1. **样本量限制**：Shapiro-Wilk检验在样本量超过5000时结果可靠性下降，此时将自动跳过该检验。\n2. **独立性假设**：Jarque-Bera检验假设数据独立，若时间序列存在自相关，检验结果可能不准确，需先进行自相关检验。\n3. **缺失值处理**：输入数据不能包含缺失值，需用户预先通过插值、删除等方式处理。\n4. **显著性水平**：默认使用0.05作为显著性水平，用户可根据需求调整。\n\n## 工具使用\n本技能的Python实现位于`scripts/model.py`，提供了`time_series_normality_test`函数，可直接调用执行时间序列数据的正态性检验。函数支持自定义显著性水平及是否生成Q-Q图，返回结构化的检验结果字典。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-time_series_normality_test",
+        "originalName": "time_series_normality_test.zip",
+        "fileName": "time_series_normality_test.zip",
+        "mimeType": "application/zip",
+        "size": 6510,
+        "path": "/zip/time_series_normality_test.zip"
+      }
+    ]
+  },
+  {
+    "id": "time_series_stationarity_testing",
+    "title": "时间序列数据平稳性检验",
+    "description": "该技能用于检验时间序列数据的平稳性，通过ADF单位根检验和KPSS趋势平稳性检验两种方法，判断序列是否满足平稳性假设，为后续时间序列建模（如ARIMA、SARIMA等）提供依据。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要判断时间序列是否平稳时触发，例如在构建时间序列预测模型前、分析序列的统计特性时。",
+    "output_format": "|",
+    "content": "---\nname: 时间序列数据平稳性检验\ndescription: 该技能用于检验时间序列数据的平稳性，通过ADF单位根检验和KPSS趋势平稳性检验两种方法，判断序列是否满足平稳性假设，为后续时间序列建模（如ARIMA、SARIMA等）提供依据。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要判断时间序列是否平稳时触发，例如在构建时间序列预测模型前、分析序列的统计特性时。\noutput_format: |\n  返回一个包含以下内容的字典：\n  1. 显著性水平（significance_level）\n  2. ADF检验结果（adf_test）：统计量、p值、临界值、是否平稳、结论\n  3. KPSS检验结果（kpss_test）：统计量、p值、临界值、是否平稳、结论\n  4. 综合结论（overall_conclusion）\n---\n\n## 工作流程\n1. **数据准备**：确保输入为单变量时间序列数据（pandas Series类型），无缺失值，样本量建议不少于20个数据点。\n2. **选择检验方法**：默认同时使用ADF检验（检测单位根）和KPSS检验（检测趋势平稳性），两种方法互补以提高结论可靠性。\n3. **执行检验**：调用工具中的实现函数，传入时间序列数据和显著性水平（默认0.05）。\n4. **结果分析**：根据两种检验的p值与显著性水平的比较，判断序列是否平稳。\n5. **输出结论**：返回各检验的详细结果及综合平稳性结论。\n\n## 约束条件\n1. 输入必须是有效的单变量时间序列，且无缺失值；若存在缺失值，需先进行填充或删除处理。\n2. 样本量需足够大（至少20个数据点），否则检验结果可能存在偏差。\n3. ADF检验和KPSS检验的原假设不同，可能出现结论不一致的情况，此时需要结合序列的实际趋势和波动进一步分析。\n4. 显著性水平默认采用0.05，可根据需求调整，但需明确说明。\n\n## 工具使用\n该技能的实现代码位于`scripts/model.py`中，可通过调用其中的`test_stationarity`函数执行平稳性检验。函数接受pandas Series类型的时间序列数据和可选的显著性水平参数，返回结构化的检验结果字典。具体调用方式可参考`examples.md`中的示例。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-time_series_stationarity_testing",
+        "originalName": "time_series_stationarity_testing.zip",
+        "fileName": "time_series_stationarity_testing.zip",
+        "mimeType": "application/zip",
+        "size": 7073,
+        "path": "/zip/time_series_stationarity_testing.zip"
+      }
+    ]
+  },
+  {
+    "id": "time_series_white_noise_test",
+    "title": "时间序列白噪声检验",
+    "description": "用于检验时间序列数据是否为白噪声的数学建模方法，通过统计量判断序列是否包含可提取的有效信息，是时间序列分析的前置基础步骤。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要判断时间序列数据是否为白噪声时触发该技能",
+    "output_format": "JSON格式，包含是否为白噪声的布尔结果、Ljung-Box统计量、p值、自相关系数、偏自相关系数等关键指标",
+    "content": "---\nname: 时间序列白噪声检验\ndescription: 用于检验时间序列数据是否为白噪声的数学建模方法，通过统计量判断序列是否包含可提取的有效信息，是时间序列分析的前置基础步骤。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要判断时间序列数据是否为白噪声时触发该技能\noutput_format: JSON格式，包含是否为白噪声的布尔结果、Ljung-Box统计量、p值、自相关系数、偏自相关系数等关键指标\n---\n\n## 工作流程\n1. **数据输入与验证**：接收一维时间序列数据，检查数据维度与缺失值情况\n2. **统计量计算**：计算序列的自相关系数（ACF）和偏自相关系数（PACF）\n3. **Ljung-Box检验**：执行Ljung-Box白噪声检验，获取各滞后阶数的统计量与p值\n4. **结果判断**：根据p值（默认显著性水平0.05）判断序列是否为白噪声\n5. **结果输出**：返回检验结论及所有相关统计指标\n\n## 约束条件\n- 输入数据必须为一维时间序列，不支持多维或非时序格式数据\n- 输入数据不能包含缺失值，需提前完成缺失值处理\n- 样本量建议不少于20，否则检验结果的可靠性会显著降低\n- 本技能仅完成白噪声判断，不涉及时间序列的预测、分解等其他分析任务\n\n## 工具使用\n本技能的Python实现位于`scripts/model.py`，可调用其中的`white_noise_test`函数完成时间序列白噪声检验。函数支持numpy数组或pandas Series作为输入，返回包含完整检验结果的字典。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-time_series_white_noise_test",
+        "originalName": "time_series_white_noise_test.zip",
+        "fileName": "time_series_white_noise_test.zip",
+        "mimeType": "application/zip",
+        "size": 5695,
+        "path": "/zip/time_series_white_noise_test.zip"
+      }
+    ]
+  },
+  {
+    "id": "topsis_evaluation",
+    "title": "TOPSIS评价法",
+    "description": "TOPSIS（Technique for Order Preference by Similarity to Ideal Solution）即优劣解距离法，是一种常用的多指标综合评价方法，通过计算各评价对象与最优解、最劣解的相对距离来确定其优劣排序。",
+    "author": "数学建模助手",
+    "version": "1.0",
+    "trigger": "[\"TOPSIS\", \"优劣解距离法\", \"多指标综合评价\", \"TOPSIS评价\"]",
+    "output_format": ">",
+    "content": "---\nname: TOPSIS评价法\ndescription: TOPSIS（Technique for Order Preference by Similarity to Ideal Solution）即优劣解距离法，是一种常用的多指标综合评价方法，通过计算各评价对象与最优解、最劣解的相对距离来确定其优劣排序。\nauthor: 数学建模助手\nversion: 1.0\ntag: 数学建模\ntrigger: [\"TOPSIS\", \"优劣解距离法\", \"多指标综合评价\", \"TOPSIS评价\"]\noutput_format: >\n  JSON格式，包含以下字段：\n  - closeness_scores: 各评价对象的贴近度得分列表\n  - ranking: 各评价对象的排名（从高到低）\n  - ideal_solution: 正理想解\n  - negative_ideal_solution: 负理想解\n---\n\n## 工作流程\n1. **构建决策矩阵**：收集各评价对象的多指标数据，形成初始决策矩阵。\n2. **标准化决策矩阵**：对决策矩阵进行归一化处理，消除指标量纲差异。\n3. **加权标准化矩阵**：将标准化矩阵与各指标权重相乘，得到加权后的矩阵。\n4. **确定正负理想解**：分别找出各指标的最优值（正理想解）和最劣值（负理想解）。\n5. **计算距离**：计算每个评价对象到正理想解和负理想解的欧氏距离。\n6. **计算贴近度并排序**：根据距离计算各对象的贴近度得分，得分越高排名越靠前。\n\n## 约束条件\n1. 所有评价指标必须为量化数据，不能包含定性指标（需预先量化处理）。\n2. 需明确区分正向指标（数值越大越好）和负向指标（数值越小越好）。\n3. 指标权重需合理分配，可通过层次分析法、熵权法等方法确定，权重之和应为1。\n4. 决策矩阵中不能存在缺失值，需预先完成数据清洗。\n\n## 工具使用\n本方法的Python实现位于`scripts/model.py`，可通过调用`topsis_evaluation`函数进行计算。函数参数包括决策矩阵、指标权重、指标类型标识，返回包含贴近度得分、排名等结果的字典。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "数学建模助手",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-topsis_evaluation",
+        "originalName": "topsis_evaluation.zip",
+        "fileName": "topsis_evaluation.zip",
+        "mimeType": "application/zip",
+        "size": 5726,
+        "path": "/zip/topsis_evaluation.zip"
+      }
+    ]
+  },
+  {
+    "id": "two_variable_correlation_coefficient",
+    "title": "两个变量间的相关系数计算",
+    "description": "计算两个连续变量之间的皮尔逊相关系数，衡量变量间的线性相关程度和方向，并输出对应的统计显著性p值。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要分析两个连续变量的线性相关性、判断变量间关联强度时，调用此技能。",
+    "output_format": "JSON格式，包含相关系数值（保留4位小数）、p值（保留4位小数）以及样本量信息。",
+    "content": "---\nname: 两个变量间的相关系数计算\ndescription: 计算两个连续变量之间的皮尔逊相关系数，衡量变量间的线性相关程度和方向，并输出对应的统计显著性p值。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要分析两个连续变量的线性相关性、判断变量间关联强度时，调用此技能。\noutput_format: JSON格式，包含相关系数值（保留4位小数）、p值（保留4位小数）以及样本量信息。\n---\n\n## Workflow\n1. 数据准备：收集两个连续型数值变量的样本数据，确保数据完整（无缺失值）或已完成缺失值处理（如删除、插补）。\n2. 工具调用：使用`scripts/model.py`中的计算函数，输入两个变量的数据集。\n3. 结果分析：根据输出的相关系数（范围-1到1）判断相关方向和强度，结合p值判断相关性的统计显著性（通常p<0.05视为显著）。\n\n## Constraints\n- 适用变量类型：仅适用于连续型数值变量，分类变量或有序变量需转换或使用其他相关分析方法。\n- 数据分布假设：皮尔逊相关系数假设数据服从正态分布，若数据严重偏离正态分布，结果可能存在偏差。\n- 缺失值处理：输入数据不能包含缺失值（NaN），需提前处理。\n- 极端值影响：极端值可能显著改变相关系数结果，建议先进行异常值检测和处理。\n\n## Tool Usage\n相关系数的计算实现位于`scripts/model.py`，可通过调用其中的`calculate_correlation`函数完成。该函数接受两个数值型列表或numpy数组作为输入参数，返回包含相关系数、p值和样本量的字典结果。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-two_variable_correlation_coefficient",
+        "originalName": "two_variable_correlation_coefficient.zip",
+        "fileName": "two_variable_correlation_coefficient.zip",
+        "mimeType": "application/zip",
+        "size": 4904,
+        "path": "/zip/two_variable_correlation_coefficient.zip"
+      }
+    ]
+  },
+  {
+    "id": "variable_weighting",
+    "title": "变量定权方法",
+    "description": "这是一种为多个评价变量确定权重的数学建模方法，常用于综合评价、多准则决策、绩效评估等场景，通过量化各变量对目标的重要性程度，提升评价结果的科学性与合理性。",
+    "author": "Doubao-1.8",
+    "version": "1.0",
+    "trigger": "当需要为多个评价指标、决策变量或影响因子确定权重时触发，例如：综合评价体系构建、多方案决策排序、绩效指标权重分配等场景。",
+    "output_format": "返回包含各变量名称与对应权重的字典或Pandas Series，支持层次分析法(AHP)、熵权法、变异系数法三种主流计算方法。",
+    "content": "---\nname: 变量定权方法\ndescription: 这是一种为多个评价变量确定权重的数学建模方法，常用于综合评价、多准则决策、绩效评估等场景，通过量化各变量对目标的重要性程度，提升评价结果的科学性与合理性。\nauthor: Doubao-1.8\nversion: 1.0\ntag: 数学建模\ntrigger: 当需要为多个评价指标、决策变量或影响因子确定权重时触发，例如：综合评价体系构建、多方案决策排序、绩效指标权重分配等场景。\noutput_format: 返回包含各变量名称与对应权重的字典或Pandas Series，支持层次分析法(AHP)、熵权法、变异系数法三种主流计算方法。\n---\n\n## 工作流程\n1. **需求分析**：明确评价目标与待赋权的变量集合，确定变量类型（定性/定量）。\n2. **方法选择**：根据变量类型与数据情况选择合适的权重计算方法：\n   - 若变量多为定性或依赖专家经验，选择层次分析法(AHP)；\n   - 若有充足的定量样本数据且需客观权重，选择熵权法；\n   - 若需反映变量离散程度对权重的影响，选择变异系数法。\n3. **数据准备**：\n   - AHP：构建专家判断矩阵（需满足互反性）；\n   - 熵权法/变异系数法：收集或预处理样本数据（如去除异常值、标准化）。\n4. **权重计算**：调用本技能的实现工具完成权重计算。\n5. **结果验证**：检查权重的合理性（如AHP的一致性检验、权重和为1等），必要时调整方法或数据。\n6. **结果应用**：将计算得到的权重用于综合评价或决策分析。\n\n## 约束条件\n1. **数据要求**：\n   - AHP：判断矩阵需为正互反矩阵，且一致性比率(CR)需小于0.1（否则需调整判断矩阵）；\n   - 熵权法/变异系数法：样本数据需为非负定量数据，且每个变量的取值不能完全相同（否则无法计算有效权重）。\n2. **方法适用性**：\n   - AHP适合定性指标占比高、依赖专家经验的场景，但主观性较强；\n   - 熵权法适合定量数据充足的场景，权重结果更客观，但无法体现专家经验；\n   - 变异系数法适合关注变量离散程度的场景，计算简单但忽略变量间的相关性。\n3. **结果限制**：权重仅反映变量的相对重要性，需结合业务场景进行合理性分析，不可直接作为绝对依据。\n\n## 工具使用\n本技能的Python实现位于`scripts/model.py`，提供了三种常用的变量定权方法：\n- `ahp_weight(judgment_matrix)`：层次分析法，输入专家判断矩阵，返回权重与一致性检验结果；\n- `entropy_weight(data_df)`：熵权法，输入样本数据DataFrame（行：样本，列：变量），返回各变量的客观权重；\n- `coefficient_of_variation_weight(data_df)`：变异系数法，输入样本数据DataFrame，返回基于离散程度的权重。\n可直接调用上述函数完成变量权重的计算。",
+    "tags": [
+      {
+        "id": "t1",
+        "name": "数学建模"
+      }
+    ],
+    "downloadCount": 0,
+    "rating": 5.0,
+    "publishDate": "2026-01-30",
+    "icon": "Code",
+    "color": "blue",
+    "status": "approved",
+    "user": {
+      "id": "id",
+      "name": "Doubao-1.8",
+      "avatar": ""
+    },
+    "comments": [],
+    "ratings": [],
+    "attachments": [
+      {
+        "id": "zip-variable_weighting",
+        "originalName": "variable_weighting.zip",
+        "fileName": "variable_weighting.zip",
+        "mimeType": "application/zip",
+        "size": 7290,
+        "path": "/zip/variable_weighting.zip"
       }
     ]
   }
