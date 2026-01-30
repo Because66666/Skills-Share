@@ -4,6 +4,9 @@
 
 ## [Version 1.3.5] - 2026-01-30
 
+### 修复 (Fixed)
+- **部署配置**: 修复 `wrangler.jsonc` 中 Cloudflare Workers Assets 配置错误，移除不必要的 `assets.binding` 字段，解决部署时的 "Cannot use assets with a binding in an assets-only Worker" 错误。
+
 ### 新增 (Added)
 - **部署配置**: 新增 `wrangler.jsonc` 配置文件，支持通过 Cloudflare Workers Assets 或 Pages 进行静态部署。
 

@@ -3,8 +3,7 @@
   "name": "skills-share",
   "compatibility_date": "2025-01-30",
   "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
+    "directory": "./dist"
   },
   "observability": {
     "enabled": true
